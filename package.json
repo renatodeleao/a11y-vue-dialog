@@ -1,0 +1,36 @@
+{
+  "name": "a11y-vue-dialog",
+  "version": "0.1.0",
+  "description": "An accessible dialog component made for Vue",
+  "repository": "git@github.com:renatodeleao/a11y-vue-dialog.git",
+  "author": "Renato de Leão <renatodeleao@gmail.com>",
+  "license": "MIT",
+  "main": "src/index.js",
+  "module": "dist/a11y-vue-dialog.esm.js",
+  "browser": "dist/a11y-vue-dialog.umd.js",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "autoprefixer": "^9.4.6",
+    "node-sass": "^4.11.0",
+    "rollup": "^1.0.0",
+    "rollup-plugin-babel": "^4.2.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-terser": "^4.0.2",
+    "rollup-plugin-vue": "^4.6.1",
+    "vue-template-compiler": "^2.5.22"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "node test/test.js",
+    "pretest": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {}
+}
