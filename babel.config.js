@@ -13,5 +13,8 @@ module.exports = (api) => {
     "@babel/plugin-proposal-object-rest-spread",
   ]
 
-  return { presets, plugins}
+  return {
+    presets,
+    plugins
+  }
 }
