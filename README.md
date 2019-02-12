@@ -1,6 +1,6 @@
 ## Install
 
-add your package
+add the package
 ```
 npm i a11y-vue-dialog
 
@@ -22,14 +22,14 @@ Vue.use(A11yVueDialog);
 
 ## Usage
 
-```vue
+```html
 <a11y-vue-dialog :open="true">
   <p>This slot content will be rendered wherever the <portal-target> with name 'destination'
     is  located.</p>
 </a11y-vue-dialog>
 ```
 
-```vue
+```html
 <!-- in your app.vue -->
 <portal-target name="dialogs" multiple />
 ```
