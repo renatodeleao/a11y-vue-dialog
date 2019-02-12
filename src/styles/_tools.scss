@@ -1,0 +1,111 @@
+/**
+ * @desc converts pixel number to relative units assuming base font-size
+ */
+@function px-to-em($px, $base-font-size: 16px) {
+  @if unitless($px) {
+      @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels.";
+      @return mq-px2em($px * 1px, $base-font-size);
+  } @else if unit($px) == em {
+      @return $px;
+  }
+  @return ($px / $base-font-size) * 1em;
+}
+
+// MAP DEEP GET
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+      $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
+/*
+ * @mixin expandToParent
+ * @description expands a div to whatever size its closesest
+ * position:relative parent
+ *
+ * @params {boolen} pseudo — if we're expanding pseudo-element :before/:after
+ */
+ @mixin expand-to-parent($pseudo: false){
+  @if $pseudo{
+    content: " ";
+  }
+  display: block;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:0;
+}
+
+/* ------------------------
+ * Browser hacks
+ * ------------------------*/
+
+/* SPECIFIC CSS FOR IE 10=<11 */
+@mixin for-modern-IE{
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    @content;
+  }
+}
+
+/*
+ * MS Edge Browser
+ */
+@mixin for-edge{
+  @supports (-ms-ime-align:auto) {
+    @content;
+  }
+}
+
+@mixin for-safari{
+  @supports (-webkit-marquee-repetition:infinite) and (object-fit:fill) {
+    @content;
+  }
+}
+
+@mixin for-safari-10 {
+  @media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) and (not (stroke-color:transparent)) {
+      @content;
+    }
+  }
+}
+
+
+
+/* ------------------------
+ * Component specific
+ * ------------------------*/
+
+/**
+ * @description adds responsive sizing properties to target selector
+ * @params {string} $div - element e in avd-sizes-map
+ * @param {string} $axis - direction of sizing
+ * @param {string|null} $cssProp - declaration to apply, defaults based on $axis
+ */
+ @mixin set-size($div, $axis, $cssProp: null, $map: $avd-sizes-maps){
+  $divMap: map-deep-get($map, $div);
+
+  @if type-of($divMap) == 'map'{
+    @if map-has-key($divMap, $axis) {
+      @if $axis == 'y' and $cssProp == null {
+        $cssProp: 'height'
+      } @else if $axis == 'x' and $cssProp == null {
+        $cssProp: 'width'
+      }
+      @each $bp, $s in map-get($divMap, $axis) {
+        @if ($bp == null) {
+          #{$cssProp}: $s;
+        } @else {
+          @media screen and (min-width: px-to-em(map-get($avd-breakpoints-map, $bp))){
+            #{$cssProp}: $s;
+          }
+        }
+      }
+    } @else {
+      @error "axis '#{$axis}' is not a key in '#{$div}' in map";
+    }
+  } @else {
+    @error "'#{$div}' is not a key in #{$map} in map";
+  }
+}

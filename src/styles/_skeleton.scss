@@ -1,0 +1,83 @@
+/*
+ * @name Skeleton Object
+ * @description, Inspired by human body. A layout wrapper that keeps
+ * head and feet sticky at the top and bottom and the body will expand
+ * to ocuppy the remaining space
+ *
+ * Real usecases:
+ * - Sticky Footer
+ *  - https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
+ *  - Overflowing content on panels & Chat interfaces
+ *  - Messenger Apps (sticky footer and header, scrollable messages)
+ */
+
+@import "tools";
+
+// wraper
+@mixin skeleton{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+// head & feet
+@mixin skeleton-tip{
+  flex: none;
+}
+
+// body
+@mixin skeleton-body($scrollable: false){
+  position: relative;
+  @if ($scrollable) {
+   @if ($scrollable == 'auto'){
+     flex: 1 1 0.000000000001%;
+     width: auto;
+   } @else {
+     flex: 1 0 0.000000000001px;
+   }
+   overflow-x: hidden;
+   overflow-y: auto;
+   -webkit-overflow-scrolling: touch;
+  } @else {
+    width: 100%;
+    flex: 1 0 auto;
+  }
+}
+.o-skeleton{
+  position: relative;
+  @include skeleton;
+}
+
+  .o-skeleton__tip{
+    position: relative;
+    @include skeleton-tip;
+  }
+
+  .o-skeleton__body{
+    position: relative;
+    @include skeleton-body;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+/* Scrollable Body variation*/
+.o-skeleton--scrollable{
+  height: 100%;
+
+  .o-skeleton__body {
+    @include skeleton-body($scrollable: true);
+  }
+}
+
+.o-skeleton--scrollable-auto {
+  // try to workaround me
+  @include for-modern-IE {
+    height: 100%;
+  }
+
+  .o-skeleton__body {
+    @include skeleton-body($scrollable: 'auto');
+  }
+}
