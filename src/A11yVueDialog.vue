@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import Portal from "portal-vue";
 import Skeleton from "./components/Skeleton.vue";
 
 
@@ -79,6 +80,7 @@ export default {
   name: "dialog-base",
   components: {
     Skeleton,
+    Portal
   },
   props: {
     open: {

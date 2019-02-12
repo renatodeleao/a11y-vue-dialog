@@ -8,10 +8,10 @@ import { terser } from 'rollup-plugin-terser';
 //https://stackoverflow.com/questions/41128621/proper-way-to-chain-postcss-and-sass-in-rollup
 import postcss from 'postcss';
 import pkg from './package.json';
-import { rollup } from 'rollup';
 
+
+const external = Object.keys(pkg.dependencies || {});
 const postcssConfig = require('./postcss.config.js');
-
 
 const rollupBabelConfig = {
 	extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue', '.ts']
@@ -66,6 +66,7 @@ export default [
 		},
 		plugins: commonUmdPlugins
 	},
+	// minified
 	{
 		input: pkg.main,
 		output: {
@@ -80,11 +81,13 @@ export default [
 			terser(terserConfig)
 		]
 	},
+	// module
 	{
 		input: pkg.main,
 		output: [
 			{ file: pkg.module, format: 'es' }
 		],
+		external,
 		plugins: [
 			sass(rollupSassOptions),
 			vue({ css: false }),
