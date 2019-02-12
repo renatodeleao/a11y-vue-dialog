@@ -34,7 +34,12 @@
     "pretest": "npm run build"
   },
   "files": [
-    "dist"
+    "dist/*.js",
+    "dist/*.css",
+    "dist/*.map",
+    "src"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "portal-vue": "^1.5.1"
+  }
 }
