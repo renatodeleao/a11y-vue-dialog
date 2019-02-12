@@ -1,4 +1,6 @@
 import A11yVueDialog from "./A11yVueDialog.vue";
+// optional stylesheet
+import "./styles/a11y-vue-dialog.scss";
 
 var COMPONENT_NAME = "component-name"
 var Plugin = {
