@@ -129,7 +129,11 @@ export default {
       handler: function(open) {
         if( open ) {
           this.handleBackgroundScrolling(true);
-          this.openDuties();
+
+          this.$nextTick(() => {
+            this.$emit('open', this);
+            this.openDuties();
+          })
         } else {
           this.handleBackgroundScrolling(false);
           this.resetData();
@@ -148,7 +152,7 @@ export default {
         this.getFocusableChildren();
         this.observeContents(true);
         this.ariaHandler(true)
-      })
+       });
     },
 
     dismiss() {
