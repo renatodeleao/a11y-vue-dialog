@@ -2,7 +2,10 @@ import A11yVueDialog from "./A11yVueDialog.vue";
 // optional stylesheet
 import "./styles/a11y-vue-dialog.scss";
 
-var COMPONENT_NAME = "A11yVueDialog"
+const DEFAULTS = {
+  componentName: "a11y-vue-dialog",
+}
+
 var Plugin = {
   install (Vue, options = {}) {
     /**
@@ -13,13 +16,19 @@ var Plugin = {
 		}
 
 		this.installed = true;
-		this.componentName = options.componentName || COMPONENT_NAME;
+		this.componentName = options.componentName || DEFAULTS.componentName;
 
-		var testing = () => {
-			return COMPONENT_NAME;
-		}
-		var ref = testing;
-		Vue.component(this.componentName, A11yVueDialog);
+    // is there a better way of doing this
+    // (extend default prop value on component registration)*
+    if( options.props) {
+      Object.keys(A11yVueDialog.props).map(propName => {
+        if(options.props[propName]) {
+          A11yVueDialog.props[propName]['default'] = options.props[propName];
+        }
+      });
+    }
+
+	  Vue.component(this.componentName, A11yVueDialog)
 	}
 }
 

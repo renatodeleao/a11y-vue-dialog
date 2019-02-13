@@ -1,5 +1,5 @@
 <template>
-  <portal to="dialogs" v-if="open">
+  <component :is="portalName" :to="portalTargetName" v-if="open">
     <div
       :id="`dialog-${_uid}`"
       :class="classObj"
@@ -46,7 +46,7 @@
         </footer>
       </skeleton>
     </div>
-  </portal>
+  </component>
 </template>
 
 <script>
@@ -80,6 +80,14 @@ export default {
     Skeleton
   },
   props: {
+    portalName: {
+      type: String,
+      default: "portal"
+    },
+    portalTargetName: {
+      type: [String, null],
+      default: "a11y-vue-dialogs"
+    },
     open: {
       type: Boolean,
       default: false
