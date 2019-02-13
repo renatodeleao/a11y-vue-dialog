@@ -40,14 +40,10 @@
           <slot />
         </section>
 
-<<<<<<< HEAD
-        <footer slot="skeleton-feet" :class="`${baseClass}__footer`" v-if="$slots['dialog-footer']">
-=======
         <footer slot="skeleton-feet"
           :class="`${baseClassname}__footer`"
           v-if="$slots['a11y-vue-dialog-footer']"
         >
->>>>>>> f256d32... fixup! namespace slots a11y-vue-dialog
           <slot name="a11y-vue-dialog-footer" />
         </footer>
       </skeleton>
