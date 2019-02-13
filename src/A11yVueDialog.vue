@@ -7,7 +7,7 @@
       @click="handleBackdropClick"
     >
       <skeleton
-        :class="`${baseClass}__inner`"
+        :class="`${baseClassname}__inner`"
         :role="role"
         aria-labelledby="dialog-title"
         aria-describedby="dialog-desc"
@@ -16,13 +16,13 @@
         @keydown.tab="trapFocus"
         ref="dialog"
       >
-        <header :class="`${baseClass}__header`" slot="skeleton-head">
-          <h1 id="dialog-title" :class="`${baseClass}__title`">
+        <header :class="`${baseClassname}__header`" slot="skeleton-head">
+          <h1 id="dialog-title" :class="`${baseClassname}__title`">
             <slot name="a11y-vue-dialog-title">Dialog Title</slot>
           </h1>
           <div
             ref="close"
-            :class="`${baseClass}__close`"
+            :class="`${baseClassname}__close`"
             tabindex="0"
             type="button"
             aria-label="Close this dialog window"
@@ -36,7 +36,7 @@
           </div>
         </header>
 
-        <section :class="`${baseClass}__body`" id="dialog-desc">
+        <section :class="`${baseClassname}__body`" id="dialog-desc">
           <slot />
         </section>
 
@@ -145,14 +145,10 @@ export default {
   },
   data: () => getInitialState(),
   computed: {
-    baseClass(){
-      return "c-dialog"
-    },
     classObj(){
       return {
-        [this.baseClass]: true,
-        [`${this.baseClass}--${this.theme}`]: this.theme,
-        [`${this.baseClass}--${this.size}`]: this.size
+        [this.baseClassname]: true,
+        [`${this.baseClassname}--is-open`]: this.open,
       }
     }
   },
@@ -238,7 +234,7 @@ export default {
     // All credits to Hugo Giraudel for this
     // https://github.com/edenspiekermann/a11y-dialog/blob/master/a11y-dialog.js
     //
-    // Copied and adptade to this instance
+    // adapted to this instance
     // ----------------
 
     /**
