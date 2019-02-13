@@ -3,7 +3,6 @@
     <div
       :id="`dialog-${_uid}`"
       :class="classObj"
-      :content-root="contentRoot"
       ref="backdrop"
       @click="handleBackdropClick"
     >
@@ -141,8 +140,8 @@ export default {
     baseClassname: {
       type: [String],
       default: "c-dialog",
-      validator: (val) => (val !== ""),
-    },
+      validator: (val) => val !== ""
+    }
   },
   data: () => getInitialState(),
   computed: {
@@ -318,14 +317,18 @@ export default {
       const contentRoot = this.contentRoot;
       let contentRootSiblings = [];
 
+      // check if content-root prop is not null, in affirmative case
+      // we just want to target it, nothing else
       if (contentRoot) {
         contentRootSiblings.push(document.querySelector(contentRoot))
       } else if (this.portalTarget) {
+      // if not, we default to find the same level elements (siblings)
+      // and apply aria-attributes to them
         contentRootSiblings = this.getSiblings(this.portalTarget);
       }
 
       if( bool ){
-        contentRootSiblings.map(s => s.setAttribute('aria-hidden', 'true'))
+        contentRootSiblings.map( s => s.setAttribute('aria-hidden', 'true'))
       } else {
         contentRootSiblings.map( s => s.removeAttribute('aria-hidden'))
       }
