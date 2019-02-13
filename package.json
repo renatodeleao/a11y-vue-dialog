@@ -4,7 +4,15 @@
   "description": "An accessible dialog component made for Vue",
   "repository": "git@github.com:renatodeleao/a11y-vue-dialog.git",
   "author": "Renato de Leão <renatodeleao@gmail.com>",
-  "keywords": ["accessibility", "a11y", "dialog", "modal", "popup", "portal", "vue"],
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "dialog",
+    "modal",
+    "popup",
+    "portal",
+    "vue"
+  ],
   "license": "MIT",
   "main": "src/index.js",
   "module": "dist/a11y-vue-dialog.esm.js",
