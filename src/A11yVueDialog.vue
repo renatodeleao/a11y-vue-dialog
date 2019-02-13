@@ -1,5 +1,5 @@
 <template>
-  <portal to="dialogs" v-if="open">
+  <component :is="portalName" :to="portalTargetName" v-if="open">
     <div
       :id="`dialog-${_uid}`"
       :class="classObj"
@@ -46,13 +46,11 @@
         </footer>
       </skeleton>
     </div>
-  </portal>
+  </component>
 </template>
 
 <script>
-import Portal from "portal-vue";
 import Skeleton from "./components/Skeleton.vue";
-
 
 const FOCUSABLE_ELEMENTS = [
   'a[href]:not([tabindex^="-"]):not([inert])',
@@ -77,12 +75,19 @@ const getInitialState = () => ({
 })
 
 export default {
-  name: "dialog-base",
+  name: "a11y-vue-dialog",
   components: {
-    Skeleton,
-    Portal
+    Skeleton
   },
   props: {
+    portalName: {
+      type: String,
+      default: "portal"
+    },
+    portalTargetName: {
+      type: [String, null],
+      default: "a11y-vue-dialogs"
+    },
     open: {
       type: Boolean,
       default: false
@@ -132,7 +137,11 @@ export default {
       handler: function(open) {
         if( open ) {
           this.handleBackgroundScrolling(true);
-          this.openDuties();
+
+          this.$nextTick(() => {
+            this.$emit('open', this);
+            this.openDuties();
+          })
         } else {
           this.handleBackgroundScrolling(false);
           this.resetData();
@@ -151,7 +160,7 @@ export default {
         this.getFocusableChildren();
         this.observeContents(true);
         this.ariaHandler(true)
-      })
+       });
     },
 
     dismiss() {
@@ -285,7 +294,7 @@ export default {
 
       if (contentRoot) {
         contentRootSiblings.push(document.querySelector(contentRoot))
-      } else {
+      } else if (this.portalTarget) {
         contentRootSiblings = this.getSiblings(this.portalTarget);
       }
 
