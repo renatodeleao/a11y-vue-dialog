@@ -19,7 +19,7 @@
       >
         <header :class="`${baseClass}__header`" slot="skeleton-head">
           <h1 id="dialog-title" :class="`${baseClass}__title`">
-            <slot name="title">Dialog Title</slot>
+            <slot name="a11y-vue-dialog-title">Dialog Title</slot>
           </h1>
           <div
             ref="close"
@@ -31,7 +31,7 @@
             @keydown.enter.prevent="dismiss"
             @keydown.space="dismiss"
           >
-            <slot name="close-button">
+            <slot name="a11y-vue-dialog-close">
               &times;
             </slot>
           </div>
@@ -41,8 +41,15 @@
           <slot />
         </section>
 
+<<<<<<< HEAD
         <footer slot="skeleton-feet" :class="`${baseClass}__footer`" v-if="$slots['dialog-footer']">
-          <slot name="dialog-footer" />
+=======
+        <footer slot="skeleton-feet"
+          :class="`${baseClassname}__footer`"
+          v-if="$slots['a11y-vue-dialog-footer']"
+        >
+>>>>>>> f256d32... fixup! namespace slots a11y-vue-dialog
+          <slot name="a11y-vue-dialog-footer" />
         </footer>
       </skeleton>
     </div>
