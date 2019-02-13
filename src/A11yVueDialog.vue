@@ -3,12 +3,11 @@
     <div
       :id="`dialog-${_uid}`"
       :class="classObj"
-      :content-root="contentRoot"
       ref="backdrop"
       @click="handleBackdropClick"
     >
       <skeleton
-        :class="`${baseClass}__inner`"
+        :class="`${baseClassname}__inner`"
         :role="role"
         aria-labelledby="dialog-title"
         aria-describedby="dialog-desc"
@@ -17,13 +16,13 @@
         @keydown.tab="trapFocus"
         ref="dialog"
       >
-        <header :class="`${baseClass}__header`" slot="skeleton-head">
-          <h1 id="dialog-title" :class="`${baseClass}__title`">
-            <slot name="title">Dialog Title</slot>
+        <header :class="`${baseClassname}__header`" slot="skeleton-head">
+          <h1 id="dialog-title" :class="`${baseClassname}__title`">
+            <slot name="a11y-vue-dialog-title">Dialog Title</slot>
           </h1>
           <div
             ref="close"
-            :class="`${baseClass}__close`"
+            :class="`${baseClassname}__close`"
             tabindex="0"
             type="button"
             aria-label="Close this dialog window"
@@ -31,18 +30,21 @@
             @keydown.enter.prevent="dismiss"
             @keydown.space="dismiss"
           >
-            <slot name="close-button">
+            <slot name="a11y-vue-dialog-close">
               &times;
             </slot>
           </div>
         </header>
 
-        <section :class="`${baseClass}__body`" id="dialog-desc">
+        <section :class="`${baseClassname}__body`" id="dialog-desc">
           <slot />
         </section>
 
-        <footer slot="skeleton-feet" :class="`${baseClass}__footer`" v-if="$slots['dialog-footer']">
-          <slot name="dialog-footer" />
+        <footer slot="skeleton-feet"
+          :class="`${baseClassname}__footer`"
+          v-if="$slots['a11y-vue-dialog-footer']"
+        >
+          <slot name="a11y-vue-dialog-footer" />
         </footer>
       </skeleton>
     </div>
@@ -80,54 +82,69 @@ export default {
     Skeleton
   },
   props: {
+      /**
+     * @desc must match to globally/locall registered portal-vue portalName
+     */
     portalName: {
       type: String,
       default: "portal"
     },
+    /**
+     * @desc must mach an existent portal-vue portal-target
+     */
     portalTargetName: {
       type: [String, null],
       default: "a11y-vue-dialogs"
     },
+    /**
+     * @desc control's dialog visibility
+     */
     open: {
       type: Boolean,
       default: false
     },
+    /**
+     * @desc add overflow hidden to app root
+     */
     preventBackgroundScrolling: {
       type: Boolean,
       default: true
     },
     /**
-     * possible usage as modal
-     * https://github.com/edenspiekermann/a11y-dialog#usage-as-a-modal
+     * @desc accessibilty attribute: possible usage as modal
+     * @url https://github.com/edenspiekermann/a11y-dialog#usage-as-a-modal
      */
     role: {
       type: String,
       default: "dialog",
       validator: (v) => ["dialog", "alertdialog"].indexOf(v) > -1
     },
+    /**
+     * @desc accessibilty attribute: hide content from screen readers
+     * when dialog is open. if null, defaults to siblings of portal-target element
+     */
     contentRoot: {
       type: [String, null],
       default: null
     },
-    theme: {
-      type: [String, null],
-      default: null
-    },
-    size: {
-      type: [String, null],
-      default: null
+    /**
+     * @desc classname that will prefix all HTML element
+     * @note opininated, BEM selectors will be created for each element.
+     * if using with sass, you should also match $avd-classname variable
+     * before import styles. More on styling
+     */
+    baseClassname: {
+      type: [String],
+      default: "c-dialog",
+      validator: (val) => val !== ""
     }
   },
   data: () => getInitialState(),
   computed: {
-    baseClass(){
-      return "c-dialog"
-    },
     classObj(){
       return {
-        [this.baseClass]: true,
-        [`${this.baseClass}--${this.theme}`]: this.theme,
-        [`${this.baseClass}--${this.size}`]: this.size
+        [this.baseClassname]: true,
+        [`${this.baseClassname}--is-open`]: this.open,
       }
     }
   },
@@ -213,7 +230,7 @@ export default {
     // All credits to Hugo Giraudel for this
     // https://github.com/edenspiekermann/a11y-dialog/blob/master/a11y-dialog.js
     //
-    // Copied and adptade to this instance
+    // adapted to this instance
     // ----------------
 
     /**
@@ -292,14 +309,18 @@ export default {
       const contentRoot = this.contentRoot;
       let contentRootSiblings = [];
 
+      // check if content-root prop is not null, in affirmative case
+      // we just want to target it, nothing else
       if (contentRoot) {
         contentRootSiblings.push(document.querySelector(contentRoot))
       } else if (this.portalTarget) {
+      // if not, we default to find the same level elements (siblings)
+      // and apply aria-attributes to them
         contentRootSiblings = this.getSiblings(this.portalTarget);
       }
 
       if( bool ){
-        contentRootSiblings.map(s => s.setAttribute('aria-hidden', 'true'))
+        contentRootSiblings.map( s => s.setAttribute('aria-hidden', 'true'))
       } else {
         contentRootSiblings.map( s => s.removeAttribute('aria-hidden'))
       }
