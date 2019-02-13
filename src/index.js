@@ -32,4 +32,5 @@ var Plugin = {
 	}
 }
 
+export { A11yVueDialog };
 export default Plugin;
