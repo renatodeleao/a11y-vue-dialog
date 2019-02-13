@@ -75,7 +75,7 @@ const getInitialState = () => ({
 })
 
 export default {
-  name: "dialog-base",
+  name: "a11y-vue-dialog",
   components: {
     Skeleton
   },
