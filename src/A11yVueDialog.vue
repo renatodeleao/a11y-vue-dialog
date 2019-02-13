@@ -282,7 +282,7 @@ export default {
 
       if (contentRoot) {
         contentRootSiblings.push(document.querySelector(contentRoot))
-      } else {
+      } else if (this.portalTarget) {
         contentRootSiblings = this.getSiblings(this.portalTarget);
       }
 
