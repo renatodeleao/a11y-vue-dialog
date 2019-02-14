@@ -11,7 +11,6 @@ Detailed documentation and additional info is available [at documentation site](
 
 ## Install
 
-add the package
 ```
 npm i a11y-vue-dialog
 
@@ -35,13 +34,12 @@ Vue.use(A11yVueDialog);
 
 ```html
 <a11y-vue-dialog :open="true">
-  <p>This slot content will be rendered wherever the <portal-target> with name 'a11y-vue-dialogs'
-    is  located.</p>
+  <p>This slot content will be rendered wherever the <portal-target name="a11y-vue-dialogs">
+    is located. (we adivse at the bottom of your root component)</p>
 </a11y-vue-dialog>
 ```
 
 ```html
-<!-- in your app.vue, name can be costumized via portalTargetName prop locally or global -->
 <portal-target name="a11y-vue-dialogs" multiple />
 ```
 

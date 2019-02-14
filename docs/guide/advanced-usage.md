@@ -43,7 +43,7 @@ import { A11yVueDialog } from "a11y-vue-dialog";
 export default {
   name: "your-component",
   components: {
-    dialog: A11yVueDialog
+    "app-dialog": A11yVueDialog
   },
   data () => ({
     open: false
@@ -52,10 +52,10 @@ export default {
 </script>
 
 <template>
-  <dialog :open="open">
+  <app-dialog :open="open">
     <p>This slot content will be rendered wherever the <portal-target> with name 'a11y-vue-dialogs'
     is  located.</p>
-  </dialog>
+  </app-dialog>
 </template>
 
 ```
