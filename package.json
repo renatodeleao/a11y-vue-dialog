@@ -2,7 +2,10 @@
   "name": "a11y-vue-dialog",
   "version": "0.3.1",
   "description": "An accessible dialog component made for Vue",
-  "repository": "git@github.com:renatodeleao/a11y-vue-dialog.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:renatodeleao/a11y-vue-dialog.git"
+  },
   "author": "Renato de Leão <renatodeleao@gmail.com>",
   "keywords": [
     "accessibility",
@@ -44,7 +47,7 @@
     "pretest": "npm run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:deploy": "./deploy.sh"
+    "docs:deploy": "./docs-deploy.sh $npm_package_repository_url"
   },
   "files": [
     "dist/*.js",
