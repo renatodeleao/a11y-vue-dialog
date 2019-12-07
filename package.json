@@ -1,6 +1,6 @@
 {
   "name": "a11y-vue-dialog",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "An accessible dialog component made for Vue",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "rollup-plugin-sass": "^1.1.0",
     "rollup-plugin-terser": "^4.0.2",
     "rollup-plugin-vue": "^4.6.1",
-    "vue-template-compiler": "2.6.6",
+    "vue-template-compiler": "2.6.10",
     "vuepress": "^0.14.8"
   },
   "scripts": {
@@ -57,5 +57,9 @@
   ],
   "dependencies": {
     "portal-vue": "^1.5.1"
+  },
+  "resolutions": {
+    "**/**/braces": "^2.3.1",
+    "**/**/js-yaml": "^3.13.0"
   }
 }

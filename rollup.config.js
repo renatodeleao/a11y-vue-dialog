@@ -89,6 +89,7 @@ export default [
 		],
 		external,
 		plugins: [
+			commonjs(),
 			sass(rollupSassOptions),
 			vue({ css: false }),
 			babel(rollupBabelConfig)
