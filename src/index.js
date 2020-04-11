@@ -13,10 +13,10 @@ var Plugin = {
      */
     if (this.installed) {
       return
-		}
+    }
 
-		this.installed = true;
-		this.componentName = options.componentName || DEFAULTS.componentName;
+    this.installed = true;
+    this.componentName = options.componentName || DEFAULTS.componentName;
 
     // is there a better way of doing this
     // (extend default prop value on component registration)*
@@ -28,8 +28,8 @@ var Plugin = {
       });
     }
 
-	  Vue.component(this.componentName, A11yVueDialog)
-	}
+    Vue.component(this.componentName, A11yVueDialog)
+  }
 }
 
 export { A11yVueDialog };

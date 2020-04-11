@@ -152,7 +152,7 @@ export default {
     open: {
       immediate: true,
       handler: function(open) {
-        if( open ) {
+        if(open) {
           this.handleBackgroundScrolling(true);
 
           this.$nextTick(() => {
@@ -272,7 +272,7 @@ export default {
      */
     observeContents(bool){
       if (bool) {
-        const callback = (mutationsList, observer) => {
+        const callback = (mutationsList) => {
           for(var mutation of mutationsList) {
             if (mutation.type == 'childList') {
               this.getFocusableChildren();
@@ -285,7 +285,7 @@ export default {
           childList: true,
           subtree: true
         });
-      } else {
+      } else {
         if (this.observer) this.observer.disconnect();
       }
     },
