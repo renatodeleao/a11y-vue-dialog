@@ -44,5 +44,11 @@ Vue.use(A11yVueDialog);
 ```
 
 
+## Play
+A playground is used to test the component locally. It uses [`vue/cli` instant prototyping feature](https://cli.vuejs.org/guide/prototyping.html), so the downside is that you have to install it globally. 
+https://cli.vuejs.org/guide/prototyping.html
+
+- Then, just run `yarn play` 
+
 ## License
 MIT

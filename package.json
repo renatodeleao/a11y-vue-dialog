@@ -37,6 +37,8 @@
     "rollup-plugin-sass": "^1.1.0",
     "rollup-plugin-terser": "^4.0.2",
     "rollup-plugin-vue": "^4.6.1",
+    "sass": "^1.26.3",
+    "sass-loader": "^8.0.2",
     "vue-template-compiler": "2.6.10",
     "vuepress": "^0.14.8"
   },
@@ -47,7 +49,8 @@
     "pretest": "npm run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:deploy": "./docs-deploy.sh $npm_package_repository_url"
+    "docs:deploy": "./docs-deploy.sh $npm_package_repository_url",
+    "play": "vue serve -o ./playground/Playground.vue"
   },
   "files": [
     "dist/*.js",
