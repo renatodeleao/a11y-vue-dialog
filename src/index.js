@@ -1,4 +1,5 @@
 import A11yVueDialog from "./A11yVueDialog.vue";
+import A11yVueDialogRenderless from "./A11yVueDialogRenderless.vue";
 // optional stylesheet
 import "./styles/a11y-vue-dialog.scss";
 
@@ -32,5 +33,5 @@ var Plugin = {
   }
 }
 
-export { A11yVueDialog };
+export { A11yVueDialog, A11yVueDialogRenderless };
 export default Plugin;
