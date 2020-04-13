@@ -322,7 +322,7 @@ export default {
   render() {
     return this.$scopedSlots.default({
       open: this.open,
-      close: this.close,
+      closeFn: this.close,
       backdropRef: {
         props: {
           'tabindex': '-1',
