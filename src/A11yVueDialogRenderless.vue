@@ -115,6 +115,22 @@ export default {
     },
 
     /**
+     * Handle keyboard events on dialoRef element an manage which
+     * method to call accordingly
+     * 
+     * @param {Event} e - Javascript keyboard event 
+     */
+    handleKeyboard(e) {
+      if (e.key === 'Escape' && this.role !== 'alertdialog' ) {
+        this.close(e)
+      }
+
+      if (e.key === 'Tab') {
+        this.trapFocus(e)
+      }
+    },
+
+    /**
      * @event Close - event for closing the dialog on the parent.
      * Internal side-effects are handled in "open" prop watcher
      */
@@ -290,6 +306,17 @@ export default {
       } else {
         contentRootSiblings.forEach(s => s && s.removeAttribute('aria-hidden'))
       }
+    },
+
+    /**
+    * Internals.
+    * 
+    * mostly created for testing, because i didn't figure out a 
+    * away of mock funtions that are defined, inline into the scopedSlots
+    * returned Object
+    */
+    _stopPropagation(e) {
+      e.stopPropagation()
     }
   },
 
@@ -340,16 +367,8 @@ export default {
           'aria-labelledby': `${this.id}-title`,
         },
         listeners: {
-          click: (e) => e.stopPropagation(),
-          keydown: (e) => {
-            if (e.key === 'Escape' && this.role !== 'alertdialog' ) {
-              this.close(e)
-            }
-
-            if (e.key === 'Tab') {
-              this.trapFocus(e)
-            }
-          }
+          click: this._stopPropagation,
+          keydown: this.handleKeyboard
         }
       },
       closeRef: {
