@@ -25,6 +25,7 @@ module.exports = {
       '/guide/',
       ['/guide/installation-and-usage', "Getting Started"],
       ['/guide/advanced-usage', "Advanced Usage"],
+      ['/guide/renderless-usage', "Renderless Usage (new)"],
       ['/guide/props', "Props"],
       ['/guide/slots', "Slots"],
       ['/guide/events', "Events"],

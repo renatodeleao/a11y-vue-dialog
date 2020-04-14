@@ -8,7 +8,7 @@ title: Introduction
 - ✅ Pure vue, no wrapping.
 - ✅ Simplicity + size
 - 🕸 Nested dialogs ([questionable pattern](https://github.com/edenspiekermann/a11y-dialog#nested-dialogs), not recommended, but possible because [it happens](https://cl.ly/be43f69393f7))
-- 🔜 _renderless version_
+- 🚧 _renderless version_
 
 
 ## Why Not ...?
