@@ -68,7 +68,7 @@ export default {
   extends: A11yVueDialogRenderless,
   props: ['open', 'role']
 }
-<script>
+</script>
 ```
 
 ### Then re-use and conquer

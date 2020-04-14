@@ -110,7 +110,7 @@ export default {
   extends: { A11yVueDialogRenderless },
   props: ['open', 'role'],
 }
-<script>
+</script>
 ```
 
 ### Then re-use and conquer
@@ -121,7 +121,7 @@ export default {
   <div id="page">
 
     <button @click="openMyModal = true">
-    <my-dialog :
+    <my-dialog
       open="openMyModal" 
       @close="openMyModal = false" 
       @confirm="handSubmit"
@@ -132,7 +132,8 @@ export default {
 </template>
 ```
 
-Checkout [this example](https://github.com/edenspiekermann/a11y-dialog#expected-dom-structure) for what's the minimum expected markup for an accessible dialog
+- Here's a [codesandbox to play with](https://codesandbox.io/s/renderless-a11y-vue-dialog-q5lqk?file=/src/components/DialogConfirm.vue)
+- Checkout [this example](https://github.com/edenspiekermann/a11y-dialog#expected-dom-structure) for what's the minimum expected markup for an accessible dialog
 
 ## Play
 
