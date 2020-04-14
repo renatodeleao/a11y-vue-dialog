@@ -61,5 +61,8 @@
   ],
   "dependencies": {
     "portal-vue": "^1.5.1"
+  },
+  "resolutions": {
+    "js-yaml": "^3.11.1"
   }
 }
