@@ -1,12 +1,21 @@
 module.exports = (api) => {
-  api.cache(false);
+  const isTest = api.env('test')
 
+  api.cache(false);
+  
   const presets = [
-    ['@babel/preset-env', {
-      modules: false,
-      useBuiltIns: false,
-      forceAllTransforms: true,
-    }],
+    [
+      '@babel/preset-env', 
+      !isTest ? {
+        modules: false,
+        useBuiltIns: false,
+        forceAllTransforms: true
+      } : {
+        targets: {
+          node: 'current',
+        }
+      }
+    ],
   ];
 
   const plugins = [
