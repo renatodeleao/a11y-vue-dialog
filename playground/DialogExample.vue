@@ -4,28 +4,30 @@
     @close="$emit('close')"
     #default="{ open, backdropRef, dialogRef, titleRef, closeRef }"
   >
-    <portal to="a11y-vue-dialogs" v-if="open">
-      <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners">
-        <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
-          <header>
-            <h1 v-bind="titleRef.props">Title</h1> 
-            <button 
-              v-bind="closeRef.props" 
-              v-on="closeRef.listeners"
-            >x
-            </button>
-          </header>
+    <portal to="a11y-vue-dialogs">
+      <transition name="fade" mode="out-in" appear>
+        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
+          <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
+            <header>
+              <h1 v-bind="titleRef.props">Title</h1> 
+              <button 
+                v-bind="closeRef.props" 
+                v-on="closeRef.listeners"
+              >x
+              </button>
+            </header>
 
-          <section>
-            <h2>Content</h2>
-            <button @click="innerTest = !innerTest">Show this</button>
-            <div v-if="innerTest">
-              with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
-            </div>
-            <slot />
-          </section>
+            <section>
+              <h2>Content</h2>
+              <button @click="innerTest = !innerTest">Show this</button>
+              <div v-if="innerTest">
+                with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
+              </div>
+              <slot />
+            </section>
+          </div>
         </div>
-      </div>
+      </transition>
     </portal>
   </a11y-vue-dialog-renderless>
 </template>
@@ -66,6 +68,13 @@ export default {
 .d__inner {
   background: white;
   padding: 20px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>
