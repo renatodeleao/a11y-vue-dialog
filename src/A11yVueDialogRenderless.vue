@@ -326,8 +326,8 @@ export default {
    * portal that is toggled with v-if not this one. But when nested is always
    * called. Needs investigation
    */
-  mounted() {
-    this.id = `a11y-vue-dialog-${this._uid}`;
+  created() {
+    this.id = !this.id && `a11y-vue-dialog-${this._uid}`
   },
 
   destroyed() {
