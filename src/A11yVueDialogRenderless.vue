@@ -69,7 +69,7 @@ export default {
       immediate: true,
       handler: function(open) {
         if (open) {
-          this.handleOpen();
+          this.handleOpen()
         } else {
           this.handleClose()
         }
@@ -80,22 +80,30 @@ export default {
     /**
      * "open" prop watcher side effects. Orchestrates everything DOM related
      * with the open state of the dialog. nextTick because dom is conditionally
-     * rendered with v-if on root node
+     * rendered with v-if on root node.
+     * 
+     * @todo [1] - kind of embarassing but i need to investigate the need of 
+     * double nextTick, otherwise it will fail to get DOM refs from data-attrs. 
+     * I get that we need one, But two? Maybe due portal mount as well? Investigate.
+     * 
+     * If found, please write a test to it,
      */
     handleOpen() {
-      this.$nextTick(() => { 
-        const hasRefs = this.getDOMRefs();
-        // do no perform DOM actions if no DOM references
-        if (!hasRefs) return;
-        
-        // focus on close button
-        this.closeEl.focus();
+      this.$nextTick(() => {
+        this.$nextTick(() => {
+          const hasRefs = this.getDOMRefs();
+          // do no perform DOM actions if no DOM references
+          if (!hasRefs) return;
+          
+          // focus on close button
+          this.closeEl.focus();
 
-        this.toggleBackgroundScroll(true);
-        this.lookForSiblings();
-        this.getFocusableChildren();
-        this.toggleMutationObserver(true);
-        this.toggleContentAriaAttrs(true)
+          this.toggleBackgroundScroll(true);
+          this.lookForSiblings();
+          this.getFocusableChildren();
+          this.toggleMutationObserver(true);
+          this.toggleContentAriaAttrs(true);
+        })
       })
     },
      /**
