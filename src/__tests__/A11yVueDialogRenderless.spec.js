@@ -23,6 +23,9 @@ describe("A11yVueDialogRenderless", () => {
       },
       showAutofocusEl: {
         default: false
+      },
+      showSearchInput: {
+        default: false
       }
     },
     data:() => ({
@@ -75,6 +78,12 @@ describe("A11yVueDialogRenderless", () => {
                   autofocus
                   type="text"
                   id="mock-autofocus"
+                />
+
+                <input 
+                  v-if="showSearchInput"                  
+                  type="search"
+                  id="mock-search-input"
                 />
               </div>
             </div>
@@ -262,6 +271,27 @@ describe("A11yVueDialogRenderless", () => {
 
         const focusRefEl = _wrapper.find('[data-ref="focus"]')
         expect(focusRefEl.attributes('id')).toBe(document.activeElement.id)
+      })
+
+    describe('exceptions', () => {
+      it('should not emit close event on "escape" keydown, if focus is on type="search" input and this is not empty', async () => {
+        const _wrapper = mountWithOptions({ 
+          propsData: {
+            showSearchInput: true
+          },
+          data: () => ({ isOpen: true }) 
+        })
+
+        await _wrapper.vm.$nextTick()
+
+        const searchInput = _wrapper.find('input[type="search"]')      
+        expect(searchInput.exists()).toBeTruthy()
+        
+        searchInput.setValue('some search value')
+        searchInput.trigger('focus')
+        searchInput.trigger('keydown.esc')
+        
+        expect(_wrapper.emitted('close')).toBeFalsy()
       })
     })
   })

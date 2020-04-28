@@ -129,7 +129,12 @@ export default {
      * @param {Event} e - Javascript keyboard event 
      */
     handleKeyboard(e) {
-      if (e.key === 'Escape' && this.role !== 'alertdialog' ) {
+      const { key, target } = e;
+
+      if (key === 'Escape' && this.role !== 'alertdialog') {
+        // do not interfere with native input behaviour
+        if (target.type === 'search' && target.value !== '') return
+
         this.close(e)
       }
 
