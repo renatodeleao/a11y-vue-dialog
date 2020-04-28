@@ -58,24 +58,19 @@ describe("A11yVueDialogRenderless", () => {
     `
   };
 
-  const wrapper = mount(WrapperComp, {
-    attachToDocument: true,
-    stubs: {
-      portal: true
-    }
-  }).find(A11yVueDialogRenderless);
-
-  const openWrapper = mount(WrapperComp, {
-    attachToDocument: true,
-    data() {
-      return {
-        isOpen: true
-      }
-    },
-    stubs: {
-      portal: true
-    }
-  }).find(A11yVueDialogRenderless);
+  const mountWithOptions = (options = {}) => {
+    return mount(WrapperComp, {
+      attachToDocument: true,
+      stubs: {
+        portal: true,
+        ...options.stubs
+      },
+      ...options
+    }).find(A11yVueDialogRenderless)
+  } 
+  
+  const wrapper = mountWithOptions()
+  const openWrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
 
   openWrapper.setMethods(methodsMock);
   
@@ -92,6 +87,7 @@ describe("A11yVueDialogRenderless", () => {
   // sanity check
   it("is a Vue instance", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
+    expect(wrapper.is(A11yVueDialogRenderless)).toBeTruthy();
   });
 
   describe('props', () => {
