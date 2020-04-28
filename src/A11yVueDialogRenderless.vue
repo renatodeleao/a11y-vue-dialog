@@ -416,6 +416,10 @@ export default {
    *  there as well so that dialog keeps closing on escape click. Not sure if
    *  the best way, but shipable for now
    * 
+   * @see [2] - It is strongly recommended that the tab sequence of all 
+   *  dialogs include a visible element with role button that closes the 
+   *  dialog, such as a close icon or cancel button. 
+   *  {@link https://www.w3.org/TR/wai-aria-practices/#dialog_modal}
    */
   render() {
     return this.$scopedSlots.default({
@@ -443,9 +447,10 @@ export default {
           keydown: this.handleKeyboard
         }
       },
+      // [2]
       closeRef: {
         props: {
-          'data-ref': 'close',          
+          'data-ref': 'close'
         },
         listeners: {
           click: this.close
