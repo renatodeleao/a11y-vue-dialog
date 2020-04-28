@@ -366,6 +366,15 @@ export default {
     */
     _stopPropagation(e) {
       e.stopPropagation()
+    },
+
+    /**
+     * If the element is present in the gathered DOM focusable elements
+     * collection. If yes than it is considered Focusable
+     * @param {HTMLElement} element
+     */
+    _isFocusable(element) {
+      return this.focusable.some(focusableEl => focusableEl === element)
     }
   },
 
