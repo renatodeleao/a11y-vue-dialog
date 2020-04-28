@@ -97,9 +97,10 @@ export default {
           if (!hasRefs) return;
           
           this.toggleBackgroundScroll(true);
-          this.lookForSiblings();
           this.getFocusableChildren();
           this.setInitialFocus(); 
+
+          this.lookForSiblings();
           this.toggleMutationObserver(true);
           this.toggleContentAriaAttrs(true);
         })
