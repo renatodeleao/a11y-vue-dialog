@@ -17,6 +17,14 @@ describe("A11yVueDialogRenderless", () => {
     components: {
       A11yVueDialogRenderless
     },
+    props: {
+      showFocusRef: {
+        default: false
+      },
+      showAutofocusEl: {
+        default: false
+      }
+    },
     data:() => ({
       isOpen: false,
     }),
@@ -24,7 +32,7 @@ describe("A11yVueDialogRenderless", () => {
       <A11yVueDialogRenderless 
         :open="isOpen"
         @close="$emit('close')"
-        #default="{ open, backdropRef, dialogRef, titleRef, closeRef }"
+        #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
       >
         <portal to="a11y-vue-dialogs" v-if="open">
           <div 
@@ -37,20 +45,38 @@ describe("A11yVueDialogRenderless", () => {
               v-bind="dialogRef.props"
               v-on="dialogRef.listeners"
             >
-              <h1 
-                class="mock-dialog__title"
-                v-bind="titleRef.props"
-              >
-                Mock title
-              </h1>
-              
-              <button 
-                class="mock-dialog__close"
-                v-bind="closeRef.props" 
-                v-on="closeRef.listeners"
-              >
-                Mock close
-              </button>
+              <header>
+                <h1 
+                  class="mock-dialog__title"
+                  v-bind="titleRef.props"
+                >
+                  Mock title
+                </h1>
+                
+                <button 
+                  class="mock-dialog__close"
+                  v-bind="closeRef.props" 
+                  v-on="closeRef.listeners"
+                >
+                  Mock close
+                </button>
+              </header>
+
+              <div>
+                <button 
+                  v-if="showFocusRef"
+                  id="mock-focus-ref"
+                  v-bind="focusRef.props"
+                >Focus ref
+                </button>
+               
+                <input 
+                  v-if="showAutofocusEl"
+                  autofocus
+                  type="text"
+                  id="mock-autofocus"
+                />
+              </div>
             </div>
           </div>
         </portal>
@@ -174,6 +200,68 @@ describe("A11yVueDialogRenderless", () => {
 
       it('should attach correct binding props to bound element', () => {
         expect(titleRef.attributes('id')).toContain('-title')
+      })
+    })
+    
+    describe('focusRef', () => {
+      const _wrapper = mountWithOptions({ 
+        propsData: {
+          showFocusRef: true
+        },
+        data: () => ({ isOpen: true }) 
+      })
+
+      const focusRef = _wrapper.find('[data-ref="focus"]') 
+
+      it('should attach correct binding props to bound element', () => {
+        expect(focusRef.exists()).toBeTruthy()
+      })
+    })
+  })
+
+  describe('behaviour', () => {
+    describe('focus', () => {
+
+      it('should focus on first focusable child unless a rule stating otherwiser', async () => {
+        const _wrapper = mountWithOptions({         
+          data: () => ({ isOpen: true }) 
+        })
+
+        // watch out for v-if
+        await _wrapper.vm.$nextTick()
+
+        const firstFocusableChildMock = _wrapper.find('[data-ref="close"]')
+        expect(firstFocusableChildMock.attributes('data-ref')).toBe(document.activeElement.getAttribute('data-ref'))
+      })
+      
+      it('should set initial focus on the first element with autofocus attribute, if it exists', async () => {
+        const _wrapper = mountWithOptions({
+          propsData: {
+            showAutofocusEl: true
+          },        
+          data: () => ({ isOpen: true }) 
+        })
+
+        // watch out for v-if
+        await _wrapper.vm.$nextTick()
+
+        const autofocusEl = _wrapper.find('[autofocus]')
+        expect(autofocusEl.attributes('id')).toBe(document.activeElement.id)
+      })
+      
+      it('should set focus on the focusRef bound element, if it exists and is non-inert', async () => {
+        const _wrapper = mountWithOptions({
+          propsData: {
+            showFocusRef: true
+          },                
+          data: () => ({ isOpen: true }) 
+        })
+
+        // watch out for v-if
+        await _wrapper.vm.$nextTick()
+
+        const focusRefEl = _wrapper.find('[data-ref="focus"]')
+        expect(focusRefEl.attributes('id')).toBe(document.activeElement.id)
       })
     })
   })
