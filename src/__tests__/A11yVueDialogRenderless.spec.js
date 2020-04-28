@@ -111,6 +111,7 @@ describe("A11yVueDialogRenderless", () => {
 
   describe('bindings', () => {
     describe('backdropRef', () => {
+      const openWrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
       const backdropRef = openWrapper.find('.mock-dialog')
 
       it('should attach correct binding props to bound element', () => {
@@ -119,10 +120,13 @@ describe("A11yVueDialogRenderless", () => {
         expect(backdropRef.attributes('data-id')).toContain(`a11y-vue-dialog-`)
       })
 
-      it('should attach correct binding listeners to bound element', () => {
+      it('should attach correct binding listeners to bound element', async () => {
         backdropRef.trigger('click')
+        
+        await openWrapper.vm.$nextTick()
 
-        expect(methodsMock.close).toHaveBeenCalled();
+        expect(openWrapper.emitted().close.length).toBe(1);
+        //expect(openWrapper.vm.close).toBeCalled();
       })
     })
     
