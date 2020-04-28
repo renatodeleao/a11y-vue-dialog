@@ -169,9 +169,9 @@ describe("A11yVueDialogRenderless", () => {
     })
     
     describe('titleRef', () => {
-      const titleRef = openWrapper.find('.mock-dialog__title') 
+      const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
+      const titleRef = _wrapper.find('.mock-dialog__title') 
 
-      console.log(openWrapper.html())
       it('should attach correct binding props to bound element', () => {
         expect(titleRef.attributes('id')).toContain('-title')
       })
