@@ -19,6 +19,7 @@ const getInitialState = () => ({
   id: null,
   dialogEl: null,
   closeEl: null,
+  focusRef: null,
   focusable: [],
   trigger: null,
   portalTarget: null,
@@ -95,12 +96,11 @@ export default {
           // do no perform DOM actions if no DOM references
           if (!hasRefs) return;
           
-          // focus on close button
-          this.closeEl.focus();
-
           this.toggleBackgroundScroll(true);
-          this.lookForSiblings();
           this.getFocusableChildren();
+          this.setInitialFocus(); 
+
+          this.lookForSiblings();
           this.toggleMutationObserver(true);
           this.toggleContentAriaAttrs(true);
         })
@@ -129,7 +129,14 @@ export default {
      * @param {Event} e - Javascript keyboard event 
      */
     handleKeyboard(e) {
-      if (e.key === 'Escape' && this.role !== 'alertdialog' ) {
+      e.stopPropagation();
+      
+      const { key, target } = e;
+
+      if (key === 'Escape' && this.role !== 'alertdialog') {
+        // do not interfere with native input behaviour
+        if (target.type === 'search' && target.value !== '') return
+
         this.close(e)
       }
 
@@ -178,6 +185,7 @@ export default {
       if (this.dialogRoot) {
         this.dialogEl = this.dialogRoot.querySelector('[data-ref="dialog"]');
         this.closeEl = this.dialogRoot.querySelector('[data-ref="close"]');
+        this.focusRef = this.dialogRoot.querySelector('[data-ref="focus"]');
         return true
       }
 
@@ -207,11 +215,51 @@ export default {
       
     /**
      * Get all focusable element inside dialog
+     * @see [1] - Authors SHOULD ensure that all dialogs (both modal and 
+     *  non-modal) have at least one focusable descendant element. Authors 
+     *  SHOULD focus an element in the modal dialog when it is displayed, 
+     *   and authors SHOULD manage focus of modal dialogs.
+     *  {@link https://www.w3.org/TR/wai-aria-1.1/#dialog}
      */
     getFocusableChildren(){
       this.focusable = Array.from(
         this.dialogEl.querySelectorAll(FOCUSABLE_ELEMENTS.join(','))
       );
+      
+      // [1]
+      if (!this.focusable.length) {
+        console.warn('All dialogs must have at least on focusable descendent: https://www.w3.org/TR/wai-aria-1.1/#dialog')
+      }
+    },
+    
+    /**
+     * Unless a condition where doing otherwise is advisable, focus is initially set on the 
+     * first focusable element:
+     *   ”first non-inert focusable area in subject’s control group whose DOM anchor has an 
+     *   autofocus attribute specified“
+     * 
+     * @see FOCUSABLE_ELEMENTS
+     * @see https://www.w3.org/TR/html52/interactive-elements.html#elementdef-dialog
+     * @see https://www.w3.org/TR/wai-aria-practices/#dialog_modal
+     */
+    setA11yFocus() {
+      const firstAutoFocusEl = this.focusable.find(el => el.autofocus)
+      firstAutoFocusEl 
+        ? firstAutoFocusEl.focus()
+        : this.focusable[0].focus()
+    },
+
+    /**
+     * If a valid focusRef is provided, we'll move focus on that, else
+     * we fallback to WAI ARIA guidelines. (<span></span> is not focusable )
+     * @see https://www.w3.org/TR/wai-aria-practices/#dialog_modal
+     */
+    setInitialFocus() {
+      if (this.focusRef && this._isFocusable(this.focusRef)) {
+        this.focusRef.focus() 
+      } else {
+        this.setA11yFocus()
+      }
     },
     
     /**
@@ -325,6 +373,15 @@ export default {
     */
     _stopPropagation(e) {
       e.stopPropagation()
+    },
+
+    /**
+     * If the element is present in the gathered DOM focusable elements
+     * collection. If yes than it is considered Focusable
+     * @param {HTMLElement} element
+     */
+    _isFocusable(element) {
+      return this.focusable.some(focusableEl => focusableEl === element)
     }
   },
 
@@ -353,6 +410,16 @@ export default {
    * @binding {Object} dialogRef - for the main dialog element
    * @binding {Object} closeRef - for attching close buttons/actions
    * @binding {Object} titleRef - For attaching dialog title, for accessiblity 
+   * 
+   * @todo [1] - If some one selects text from the dialog, document.activeElement is
+   *  set to the backdrop, even with tabindex="-1", so we need to bind keyboard events
+   *  there as well so that dialog keeps closing on escape click. Not sure if
+   *  the best way, but shipable for now
+   * 
+   * @see [2] - It is strongly recommended that the tab sequence of all 
+   *  dialogs include a visible element with role button that closes the 
+   *  dialog, such as a close icon or cancel button. 
+   *  {@link https://www.w3.org/TR/wai-aria-practices/#dialog_modal}
    */
   render() {
     return this.$scopedSlots.default({
@@ -365,7 +432,8 @@ export default {
           'data-ref': 'backdrop',
         },
         listeners: {
-          click: this.role !== 'alertdialog' ? this.close : noop
+          click: this.role !== 'alertdialog' ? this.close : noop,
+          keydown: this.handleKeyboard // [1]
         }
       },
       dialogRef: {
@@ -379,9 +447,10 @@ export default {
           keydown: this.handleKeyboard
         }
       },
+      // [2]
       closeRef: {
         props: {
-          'data-ref': 'close',          
+          'data-ref': 'close'
         },
         listeners: {
           click: this.close
@@ -392,6 +461,11 @@ export default {
           id: `${this.id}-title`
         }
       },
+      focusRef: {
+        props: {
+          'data-ref': 'focus'
+        }
+      }
     })
   }
 }
