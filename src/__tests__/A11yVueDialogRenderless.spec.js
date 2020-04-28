@@ -152,7 +152,8 @@ describe("A11yVueDialogRenderless", () => {
     })
     
     describe('closeRef', () => {
-      const closeRef = openWrapper.find('.mock-dialog__close')
+      const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
+      const closeRef = _wrapper.find('.mock-dialog__close')
 
       it('should attach correct binding props to bound element', () => {
         expect(closeRef.attributes('data-ref')).toBe('close')
@@ -161,9 +162,9 @@ describe("A11yVueDialogRenderless", () => {
       it('should attach correct binding listeners to bound element', async () => {
         closeRef.trigger('click')
 
-        await openWrapper.vm.$nextTick()
+        await _wrapper.vm.$nextTick()
 
-        expect(methodsMock.close).toHaveBeenCalled();
+        expect(_wrapper.emitted().close.length).toBe(1);
       })
     })
     
