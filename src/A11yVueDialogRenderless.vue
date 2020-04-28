@@ -129,6 +129,8 @@ export default {
      * @param {Event} e - Javascript keyboard event 
      */
     handleKeyboard(e) {
+      e.stopPropagation();
+      
       const { key, target } = e;
 
       if (key === 'Escape' && this.role !== 'alertdialog') {
@@ -408,6 +410,12 @@ export default {
    * @binding {Object} dialogRef - for the main dialog element
    * @binding {Object} closeRef - for attching close buttons/actions
    * @binding {Object} titleRef - For attaching dialog title, for accessiblity 
+   * 
+   * @todo [1] - If some one selects text from the dialog, document.activeElement is
+   *  set to the backdrop, even with tabindex="-1", so we need to bind keyboard events
+   *  there as well so that dialog keeps closing on escape click. Not sure if
+   *  the best way, but shipable for now
+   * 
    */
   render() {
     return this.$scopedSlots.default({
@@ -420,7 +428,8 @@ export default {
           'data-ref': 'backdrop',
         },
         listeners: {
-          click: this.role !== 'alertdialog' ? this.close : noop
+          click: this.role !== 'alertdialog' ? this.close : noop,
+          keydown: this.handleKeyboard // [1]
         }
       },
       dialogRef: {
