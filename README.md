@@ -56,7 +56,7 @@ A renderless version provides all the functionality required to build a proper `
 | dialogRef   | Object   | for the main dialog element
 | closeRef    | Object   | for attaching close buttons/actions
 | titleRef    | Object   | For attaching dialog title, accessibility 
-
+| focusRef    | Object   | For cherry-picking the first focusable element on open
 
 ### Example
 ```html
@@ -65,7 +65,7 @@ A renderless version provides all the functionality required to build a proper `
   <a11y-vue-dialog-renderless 
     v-bind="$props"
     @close="$emit('close')"
-    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef }"
+    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
   >
     <portal to="a11y-vue-dialogs" v-if="open">
       <div class="youclasses" 
@@ -85,6 +85,12 @@ A renderless version provides all the functionality required to build a proper `
             x
           </button>
           <section>
+            <!-- autofocus would also work on this case, but not every focusable element supports it -->
+            <input 
+              type="text" 
+              placeholder="I will get focused first because i'm the focus ref" 
+              v-bind="focusRef.props"
+            />
             <slot />
           </section>
           <footer>

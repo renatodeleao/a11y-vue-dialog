@@ -14,6 +14,7 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
 | dialogRef   | Object   | for the main dialog element
 | closeRef    | Object   | for attaching close buttons/actions
 | titleRef    | Object   | For attaching dialog title, accessibility 
+| focusRef    | Object   | For cherry-picking the first focusable element on open
 
 
 ### Example
@@ -23,7 +24,7 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
   <a11y-vue-dialog-renderless 
     v-bind="$props"
     @close="$emit('close')"
-    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef }"
+    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
   >
     <portal to="a11y-vue-dialogs" v-if="open">
       <div class="youclasses" 
@@ -43,6 +44,12 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
             x
           </button>
           <section>
+            <!-- autofocus would also work on this case, but not every focusable element supports it -->
+            <input 
+              type="text" 
+              placeholder="I will get focused first because i'm the focus ref" 
+              v-bind="focusRef.props"
+            />
             <slot />
           </section>
           <footer>
