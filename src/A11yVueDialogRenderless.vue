@@ -158,18 +158,13 @@ export default {
      */
     toggleBackgroundScroll(isOpen) {
       if (this.preventBackgroundScrolling) {
-        // if (this.siblingsCount > 1) return; // legacy ?
+        if (this.siblingsCount > 1) return; // translates to: one dialog is already open
+        
+        const bodyStyle = document.body.style;
 
-        const body = document.body.style;
-        const app = this.$root.$el.style;
-
-        if(isOpen) {
-          body.setProperty("overflow", "hidden");
-          app.setProperty("overflow-y", "scroll"); // [1]
-        } else {
-          body.removeProperty("overflow", "hidden")
-          app.removeProperty("overflow-y", "scroll"); // [1]
-        }
+        isOpen 
+          ? bodyStyle.setProperty("overflow", "hidden")
+          : bodyStyle.removeProperty("overflow", "hidden")
       }
     },
     

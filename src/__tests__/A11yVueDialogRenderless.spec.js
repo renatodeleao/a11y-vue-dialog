@@ -307,6 +307,22 @@ describe("A11yVueDialogRenderless", () => {
       // it('should trap focus within dialog tab + shift + tab key', () => {})
     })
 
+    describe('scroll', () => {
+      it('should prevent body scrolling if preventBackgroundScrolling is set to true on open', async () => {
+        const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
+
+        await _wrapper.vm.$nextTick()
+
+        expect(document.body.style.overflow).toBe('hidden')
+        
+        _wrapper.setProps({ open: false })
+        
+        await _wrapper.vm.$nextTick()
+        
+        expect(document.body.style.overflow).toBe('')        
+      })
+    })
+
     describe('exceptions', () => {
       it('should not emit close event on "escape" keydown, if focus is on type="search" input and this is not empty', async () => {
         const _wrapper = mountWithOptions({

@@ -24,7 +24,7 @@ props: {
     default: false
   },
   /**
-   * @desc add overflow hidden to app root
+   * @desc add overflow hidden to body
    */
   preventBackgroundScrolling: {
     type: Boolean,
