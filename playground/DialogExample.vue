@@ -4,9 +4,9 @@
     @close="$emit('close')"
     #default="{ open, backdropRef, dialogRef, titleRef, closeRef }"
   >
-    <portal to="a11y-vue-dialogs">
+    <portal to="a11y-vue-dialogs" v-if="open">
       <transition name="fade" mode="out-in" appear>
-        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
+        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners">
           <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
             <header>
               <h1 v-bind="titleRef.props">Title</h1> 
