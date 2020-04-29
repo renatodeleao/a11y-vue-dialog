@@ -2,12 +2,12 @@
   <div id="playground">
     <main id="main">
       <button @click="isOpen = !isOpen">Default</button>
-      <DialogExample :open="isOpen" @close="isOpen = false"  />
+      <DialogExample :open="isOpen" @close="isOpen = false" key="lonely" />
 
       <button @click="exOpen = !exOpen">Nexted Example</button>
-      <DialogExample :open="exOpen" @close="exOpen = false">
+      <DialogExample :open="exOpen" @close="exOpen = false" key="parent">
         <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
-        <DialogExample :open="exOpenTwo" @close="exOpenTwo = false" role="alertdialog">
+        <DialogExample :open="exOpenTwo" @close="exOpenTwo = false" role="alertdialog" key="nested">
           <h3>This wont' close with escape since it's an alertdialog</h3>
         </DialogExample>
       </DialogExample>
