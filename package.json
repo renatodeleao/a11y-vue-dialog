@@ -53,7 +53,7 @@
     "dev": "rm -rf dist/** && rollup -c -w",
     "test": "node test/test.js",
     "test:unit": "jest",
-    "pretest": "npm run build",
+    "preflight": "yarn test:unit && yarn build && yarn docs:build",
     "docs:dev": "vuepress dev docs --debug --port 2000",
     "docs:build": "vuepress build docs",
     "docs:deploy": "./docs-deploy.sh $npm_package_repository_url",
