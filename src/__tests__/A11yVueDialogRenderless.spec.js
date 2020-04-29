@@ -152,25 +152,25 @@ describe("A11yVueDialogRenderless", () => {
   })
 
   describe('bindings', () => {
-    // describe('backdropRef', () => {
-    //   const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
-    //   const backdropRef = _wrapper.find('.mock-dialog')
+    describe('backdropRef', () => {
+      const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
+      const backdropRef = _wrapper.find('.mock-dialog')
 
-    //   it('should attach correct binding props to bound element', () => {
-    //     expect(backdropRef.attributes('data-ref')).toBe('backdrop')
-    //     expect(backdropRef.attributes('tabindex')).toBe('-1')
-    //     expect(backdropRef.attributes('data-id')).toContain(`a11y-vue-dialog-`)
-    //   })
+      it('should attach correct binding props to bound element', () => {
+        expect(backdropRef.attributes('data-ref')).toBe('backdrop')
+        expect(backdropRef.attributes('tabindex')).toBe('-1')
+        expect(backdropRef.attributes('data-id')).toContain(`a11y-vue-dialog-`)
+      })
 
-    //   it('should attach correct binding listeners to bound element', async () => {
-    //     backdropRef.trigger('click')
+      it('should attach correct binding listeners to bound element', async () => {
+        backdropRef.trigger('click')
 
-    //     await _wrapper.vm.$nextTick()
+        await _wrapper.vm.$nextTick()
 
-    //     expect(_wrapper.emitted().close.length).toBe(1);
-    //     //expect(openWrapper.vm.close).toBeCalled();
-    //   })
-    // })
+        expect(_wrapper.emitted().close.length).toBe(1);
+        //expect(openWrapper.vm.close).toBeCalled();
+      })
+    })
 
     describe('dialogRef', () => {
       it('should attach correct binding props to bound element', () => {
