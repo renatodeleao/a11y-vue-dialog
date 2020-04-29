@@ -28,8 +28,8 @@
     "@babel/preset-env": "^7.2.3",
     "@vue/test-utils": "^1.0.0-beta.33",
     "autoprefixer": "^9.4.6",
-    "babel-jest": "^25.3.0",
     "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^25.3.0",
     "cssnano": "^4.1.8",
     "jest": "^25.3.0",
     "node-sass": "^4.11.0",
@@ -66,7 +66,7 @@
     "src"
   ],
   "dependencies": {
-    "portal-vue": "^1.5.1"
+    "portal-vue": "^2.1.7"
   },
   "resolutions": {
     "js-yaml": "^3.11.1"
