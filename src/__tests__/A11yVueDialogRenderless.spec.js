@@ -343,6 +343,39 @@ describe("A11yVueDialogRenderless", () => {
 
         expect(_wrapper.emitted('close')).toBeFalsy()
       })
+
+      /**
+      * @todo for cases where backdrop is root and wraps dialogRef (content)
+      * edge case when someone, for example, starts selecting text inside
+      * dialogRef and drags selection to outside and relases mouse click (mouseup)
+      * 
+      * 🆘 I have no clue how to write a test for this
+      *
+      * @see A11yVueDialogRenderless#captureMouseUp 
+      */
+      it('should stop backdropRef click event if mouseup on backdropRef is preceded from a mousedown with a different origin', async () => {      
+        const container = mountWithOptions({ 
+          data: () => ({ isOpen: true })
+        })
+
+        const backdropRefIsRoot = container.find('[data-ref="backdrop"]')
+        const dialogRef = container.find('[data-ref="dialog"]')
+        
+        expect(container.vm.mouseDownOrigin).toBeNull();
+        dialogRef.trigger('mousedown')
+
+        // save an origin of the moused in the data model
+        expect(container.vm.mouseDownOrigin.className).toEqual('mock-dialog__inner');
+
+        // trigger mouseup on backdrop after mousedown on dialog "pseudo-drag"
+        backdropRefIsRoot.trigger('mouseup')
+
+        // since mouse
+        expect(container.emitted().close).toBeUndefined()
+        // this is what's actually happen but can't mock
+        //expect(container.vm.captureMouseUp).toHaveBeenCalled()        
+        //expect(container.vm.mouseDownOrigin).toBeNull()        
+      })
     })
   })
 });

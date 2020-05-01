@@ -15,6 +15,9 @@ const FOCUSABLE_ELEMENTS = [
   '[tabindex]:not([tabindex^="-"]):not([inert])'
 ];
 
+/**
+ * @see spyMouseDown|spyMouseUp - [1] 
+ */
 const getInitialState = () => ({
   id: null,
   dialogEl: null,
@@ -23,7 +26,8 @@ const getInitialState = () => ({
   focusable: [],
   trigger: null,
   portalTarget: null,
-  siblingsCount: 0
+  siblingsCount: 0,
+  mouseDownOrigin: null // [1]
 })
 
 export const VALID_ROLES = ["dialog", "alertdialog"];
@@ -195,8 +199,8 @@ export default {
       if (destroy) {
         Object.assign(this.$data, getInitialState())
       } else {
-        const { trigger, focusable, siblingsCount } = getInitialState()
-        Object.assign(this.$data, { trigger, focusable, siblingsCount })
+        const { trigger, focusable, siblingsCount, mouseDownOrigin } = getInitialState()
+        Object.assign(this.$data, { trigger, focusable, siblingsCount, mouseDownOrigin })
       }
     },
 
@@ -377,6 +381,45 @@ export default {
      */
     _isFocusable(element) {
       return this.focusable.some(focusableEl => focusableEl === element)
+    },
+
+    /**
+     * Prevents mouseup that started inside (dialogRef mousedown) to bubble 
+     * and trigger backdrop click, consequentially closing the dialog. 
+     * 
+     * ⚠️ Note: for cases when backdropRef wraps the dialog content, 
+     *    so it's also our root, that's why it's affected by children 
+     *    events bubbling
+     * 
+     * This prevents a default browser behaviour, when the mouse click is released,
+     * both the mouseup and click events are fired. Since consumers might define
+     * backdrop as root (picture a pseudo element as the overlay for example)
+     * 
+     * Setting as separate element inside the root doens't require this, but
+     * we must remain unopinionated in relation to markup.
+     *
+     * @see https://stackoverflow.com/a/20290312/2801012
+     * @see https://codesandbox.io/s/click-drag-selection-outside-still-triggers-click-after-mouseup-t0742
+     *
+     * @see captureMouseUp 
+     * @see spyMouseDown
+     * @see spyMouseUp
+     */
+    captureMouseUp(e) {
+      e.stopPropagation(); // Stop the click from being propagated.
+      window.removeEventListener('click', this.captureMouseUp, true); // cleanup
+      this.mouseDownOrigin = null
+    },
+    spyMouseDown(e) {
+      e.stopPropagation()
+      this.mouseDownOrigin = e.target
+    },
+    spyMouseUp(e) {
+      e.stopPropagation()
+      if (this.mouseDownOrigin !== e.target) {
+        // capture it: was triggered somewhere else
+        window.addEventListener('click', this.captureMouseUp, true)
+      }
     }
   },
 
@@ -428,7 +471,9 @@ export default {
         },
         listeners: {
           click: this.role !== 'alertdialog' ? this.close : noop,
-          keydown: this.handleKeyboard // [1]
+          keydown: this.handleKeyboard, // [1]
+          mousedown: this.spyMouseDown,
+          mouseup: this.spyMouseUp,
         }
       },
       dialogRef: {
@@ -439,7 +484,9 @@ export default {
         },
         listeners: {
           click: this._stopPropagation,
-          keydown: this.handleKeyboard
+          keydown: this.handleKeyboard,
+          mousedown: this.spyMouseDown,
+          mouseup: this.spyMouseUp,
         }
       },
       // [2]
