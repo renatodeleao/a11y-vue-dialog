@@ -26,6 +26,8 @@ const getInitialState = () => ({
   focusable: [],
   focusedIndex: -1,
   trigger: null,
+  mutating: false,
+  caralho: null,
   portalTarget: null,
   siblingsCount: 0,
   mouseDownOrigin: null // [1]
@@ -147,19 +149,8 @@ export default {
         this.close(e)
       }
 
-      if (e.key === 'Tab') {
-        if(this.mutated) {
-          console.log('manual')
-          console.log( this.focusable[this.focusedIndex].textContent)
-          
-          setTimeout(() => {
-            this.focusable[this.focusedIndex].focus()    
-            this.mutated = false 
-          })
-          
-        } else {
-          this.trapFocus(e)
-        }
+      if (e.key === 'Tab') {        
+        this.trapFocus(e)
       }
     },
 
@@ -307,6 +298,14 @@ export default {
      * @see toggleMutationObserver
      */
     handleFocus() {
+      console.log('handlefocus')
+
+
+      if (this.mutating) {
+        console.log('is mutating no handlefocus so focus index is saved to the prev')
+        return;
+      }
+
       this.focusedIndex = this.focusable.indexOf(document.activeElement)
     },
 
@@ -322,6 +321,64 @@ export default {
         ? this.dialogRoot.addEventListener('focus', this.handleFocus, true)
         : this.dialogRoot.removeEventListener('focus', this.handleFocus, true)
     },
+    test(e) {
+      e.stopPropagation()
+
+      this.lookForSiblings();
+      if (this.siblingsCount > 1) {
+        this.mutating = false
+        console.log('nope')
+        this.focusedIndex = this.focusable.indexOf(this.mouseDownOrigin)
+        this.dialogRoot.addEventListener('focus', this.handleFocus, true);
+        window.removeEventListener('keydown', this.test, true)
+        
+
+        return false;
+      }
+
+      console.log('nope')
+
+      if(e.key === 'Escape') {
+
+        window.removeEventListener('keydown', this.test, true)
+
+        this.close()                    
+      }
+
+      if (e.key === 'Tab') {
+        console.log('tabbb capture')
+        this.mutating = true
+
+        let next = e.shiftKey ? this.focusedIndex - 1 : this.focusedIndex
+
+        if(this.focusable[next]) {
+        
+          console.log('Nnext')
+          setTimeout(() => {
+            this.focusable[next].focus()
+            this.mutating = false
+            window.removeEventListener('keydown', this.test, true)
+            this.dialogRoot.addEventListener('focus', this.handleFocus, true);
+
+          })
+
+        } else {
+          console.log('first')
+          console.log(this.focusable[0].textContent)
+          setTimeout(() => {
+            this.focusable[0].focus()
+            console.log('setupsasd')
+            this.mutating = false
+            window.removeEventListener('keydown', this.test, true)
+            this.dialogRoot.addEventListener('focus', this.handleFocus, true);
+
+
+          })
+        }
+      
+      }
+    },
+
 
     /**
      * A default MutationObserver to watch for dynamically added content
@@ -331,47 +388,41 @@ export default {
     toggleMutationObserver(isOpen){
       if (isOpen) {
         const callback = (mutationsList) => {
-          for(var mutation of mutationsList) {
+          for (var [i, mutation] of mutationsList.entries()) {
             if (mutation.type == 'childList' || mutation.type === 'attributes') {
               // v-if might have happend, so listen for tick
-              this.$nextTick(() => {
-                this.getFocusableChildren();
+              this.getFocusableChildren();
 
-                // if element was removed or hidden, since we filter these from focusableChildren array
-                // the same focusIndex will correspond now to next focusable element.
-                // and move focus there. if we remove and not else next, back to square one
-                // by a11y guidelines we always need one focusable el
-                const cur = this.focusable[this.focusedIndex]
-                console.log(mutation.target)
-                console.log(this.focusable.indexOf(mutation.target))
-              
+              if (document.activeElement === this.focusable[this.focusedIndex]) {
+                // don't do anythig else if our focus  element stays intact
+                return;
+              }
+            }
 
-                if (mutation.target !== cur) return;
-                
-                if( mutation.target === cur) {
-                  this.mutated = true
-                  console.log('equal')
-                  console.log(this.focusedIndex)
-                  let next = parseInt(this.focusedIndex) + 1
-                  this.dialogRoot.focus() // will set focusedIndex to -1 but keep dialog closable
-                  console.log(this.focusedIndex)
 
-                  this.$nextTick(() => {
-                    this.focusedIndex = next // on tab start like regular default browser (on next)
-                    console.log('should be 3')
-                    console.log(this.focusedIndex)
-                    console.log(document.activeElement)
-                  })
+            if ( i === mutationsList.length - 1) {
 
+              // button was disabled on removed
+                // remove immediatlly because capture might have not been used
+                // to self clean
+           
+                if( document.activeElement === document.body) {
+                  console.log('body')
+                  this.mutating = true
+                  this.dialogRoot.removeEventListener('focus', this.handleFocus, true);
+                  window.removeEventListener('keydown', this.test, true)
+                  window.addEventListener('keydown', this.test, true)
+                  console.log('higjack')
+                } else {
+                  console.log('else')
+                  this.lookForSiblings() 
+
+                  if (this.siblingsCount > 1)  return;
+
+                  window.removeEventListener('keydown', this.test, true)
+                  this.mutating = false
+                  this.handleFocus()
                 }
-                
-                // console.log('am i focusable after the mutation check if focusible next')
-                // cur = this._isFocusable(mutation.target) && this.focusable[this.focusedIndex + 1]
-                // console.log(cur)
-                // cur 
-                //   ? cur.focus()
-                //   : this.dialogRoot.focus()
-              })
             }
           }
         };

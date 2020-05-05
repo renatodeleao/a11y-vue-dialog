@@ -8,19 +8,16 @@
         @close="isOpen = false" 
         key="lonely"
         #default="{ focusRef }">
-        <button style="visibility:hidden">adasd</button>
-        <button v-show="submit" :class="{'remove': !submit}" @click="submit = !submit">Remove Me on submit</button>
-        <div v-show="!submit" style="margin-top: 20px">
-          <button >I'm nex</button>
-          <a href="#asd" v-bind="focusRef.props">I'm next ref</a>
-          <button>Last</button>
-        </div>
+        <button :disabled="submitting" @click="fakeSubmit" v-if="!submitted">Submit one</button>
+        <button :disabled="submitting" @click="fakeSubmit">Next</button>
+        <button v-if="submitted">Close</button>
+      
       </DialogExample>
 
       <button @click="exOpen = !exOpen">Nexted Example</button>
       <DialogExample :open="exOpen" @close="exOpen = false" key="parent">
-        <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
-        <DialogExample :open="exOpenTwo" @close="exOpenTwo = false" role="alertdialog" key="nested">
+        <button @click="openNested" :disabled="openingNested">Open nested</button>
+        <DialogExample :open="nestedOpen" @close="nestedOpen = false" role="alertdialog" key="nested">
           <h3>This wont' close with escape since it's an alertdialog</h3>
         </DialogExample>
       </DialogExample>
@@ -47,11 +44,30 @@ export default {
   },
   data: () => ({
     exOpen: false,
-    exOpenTwo: false,
+    openingNested: false,
+    nestedOpen: false,
     isOpen: false,
     showThis: false,
-    submit: true
-  })
+    submitted: false,
+    submitting: false
+  }),
+  methods: {
+    fakeSubmit() {
+      this.submitting = true
+
+      setTimeout(() => {
+        this.submitting = false
+        this.submitted = true
+      }, 2000)
+    },
+    openNested() {
+      this.openingNested = true
+      setTimeout(() => {
+        this.nestedOpen = true
+        this.openingNested = false
+      }, 2000);
+    }
+  }
 }
 </script>
 
