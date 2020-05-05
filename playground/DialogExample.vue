@@ -2,7 +2,7 @@
   <a11y-vue-dialog-renderless 
     v-bind="$props"
     @close="$emit('close')"
-    #default="{ open, backdropRef, dialogRef, titleRef, closeRef }"
+    #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
   >
     <portal to="a11y-vue-dialogs">
       <transition name="fade" mode="out-in" appear>
@@ -23,7 +23,7 @@
               <div v-if="innerTest">
                 with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
               </div>
-              <slot />
+              <slot v-bind="{ focusRef }"/>
             </section>
           </div>
         </div>
