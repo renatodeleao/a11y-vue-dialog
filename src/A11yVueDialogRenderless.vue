@@ -192,16 +192,14 @@ export default {
     },
 
     /**
-     * Cleans component internal state (data object), while caching static elements 
-     * references to avoid querySelector them all the time.
+     * Cleans component internal state (data object).
+     * @todo implement a cache mechanism in case component wasn't destroyed. 
+     * #perf
      */
-    resetData(destroy = false) {
-      if (destroy) {
-        Object.assign(this.$data, getInitialState())
-      } else {
-        const { trigger, focusable, siblingsCount, mouseDownOrigin } = getInitialState()
-        Object.assign(this.$data, { trigger, focusable, siblingsCount, mouseDownOrigin })
-      }
+    resetData() {
+      // eslint-disable-next-line
+      const { id, ...resetData} = getInitialState()
+      Object.assign(this.$data, resetData)
     },
 
     //-////////////////////////////////////////////////////////////////////////
@@ -434,7 +432,7 @@ export default {
   },
 
   destroyed() {
-    this.resetData(true)
+    this.resetData()
   },
 
   /**
