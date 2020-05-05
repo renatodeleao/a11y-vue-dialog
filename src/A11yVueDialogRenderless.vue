@@ -296,8 +296,11 @@ export default {
       if (isOpen) {
         const callback = (mutationsList) => {
           for(var mutation of mutationsList) {
-            if (mutation.type == 'childList') {
-              this.getFocusableChildren();
+            if (mutation.type == 'childList' || mutation.type === 'attributes') {
+              // v-if might have happend, so listen for tick
+              this.$nextTick(() => {
+                this.getFocusableChildren();
+              })
             }
           }
         };
@@ -305,7 +308,8 @@ export default {
         this.observer = new MutationObserver(callback);
         this.observer.observe( this.dialogEl, {
           childList: true,
-          subtree: true
+          subtree: true,
+          attributes: true
         });
       } else {
         if (this.observer) {
