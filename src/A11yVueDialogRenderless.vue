@@ -430,7 +430,7 @@ export default {
    * called. Needs investigation
    */
   created() {
-    this.id = !this.id && `a11y-vue-dialog-${this._uid}`
+    this.id = `a11y-vue-dialog-${this._uid}`
   },
 
   destroyed() {
