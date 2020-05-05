@@ -100,7 +100,7 @@ export default {
           const hasRefs = this.getDOMRefs();
           // do no perform DOM actions if no DOM references
           if (!hasRefs) return;
-          
+
           this.toggleBackgroundScroll(true);
           this.toggleFocusListener(true);
           this.getFocusableChildren();
