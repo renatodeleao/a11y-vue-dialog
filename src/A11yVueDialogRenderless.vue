@@ -218,11 +218,11 @@ export default {
      *   and authors SHOULD manage focus of modal dialogs.
      *  {@link https://www.w3.org/TR/wai-aria-1.1/#dialog}
      */
-    getFocusableChildren(){
+    getFocusableChildren() {
       this.focusable = Array.from(
         this.dialogEl.querySelectorAll(FOCUSABLE_ELEMENTS.join(','))
-      );
-      
+      ).filter(this._isFocusable)
+
       // [1]
       if (!this.focusable.length) {
         console.warn('All dialogs must have at least on focusable descendent: https://www.w3.org/TR/wai-aria-1.1/#dialog')
@@ -377,12 +377,34 @@ export default {
     },
 
     /**
+     * Straight from jQuery :visible. Also accounts for cases where a parent
+     * wrapper might be hidden (v-show) and no the element itself
+     * @author jQuery
+     * @see https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
+     * @see https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+     */
+   _isVisible(element) {
+      return !!(
+        element.offsetWidth ||
+        element.offsetHeight ||
+        element.getClientRects().length
+      );
+    },
+
+    _isNotInert(element) {
+      return element.matches(FOCUSABLE_ELEMENTS)
+    },
+
+    /**
      * If the element is present in the gathered DOM focusable elements
      * collection. If yes than it is considered Focusable
      * @param {HTMLElement} element
      */
     _isFocusable(element) {
-      return this.focusable.some(focusableEl => focusableEl === element)
+      return (
+        this._isNotInert(element) &&
+        this._isVisible(element)
+      )
     },
 
     /**
