@@ -148,7 +148,18 @@ export default {
       }
 
       if (e.key === 'Tab') {
-        this.trapFocus(e)
+        if(this.mutated) {
+          console.log('manual')
+          console.log( this.focusable[this.focusedIndex].textContent)
+          
+          setTimeout(() => {
+            this.focusable[this.focusedIndex].focus()    
+            this.mutated = false 
+          })
+          
+        } else {
+          this.trapFocus(e)
+        }
       }
     },
 
@@ -330,11 +341,36 @@ export default {
                 // the same focusIndex will correspond now to next focusable element.
                 // and move focus there. if we remove and not else next, back to square one
                 // by a11y guidelines we always need one focusable el
-                const next = this.focusable[this.focusedIndex]
-            
-                next 
-                  ? next.focus() 
-                  : this.focusable[0].focus() 
+                const cur = this.focusable[this.focusedIndex]
+                console.log(mutation.target)
+                console.log(this.focusable.indexOf(mutation.target))
+              
+
+                if (mutation.target !== cur) return;
+                
+                if( mutation.target === cur) {
+                  this.mutated = true
+                  console.log('equal')
+                  console.log(this.focusedIndex)
+                  let next = parseInt(this.focusedIndex) + 1
+                  this.dialogRoot.focus() // will set focusedIndex to -1 but keep dialog closable
+                  console.log(this.focusedIndex)
+
+                  this.$nextTick(() => {
+                    this.focusedIndex = next // on tab start like regular default browser (on next)
+                    console.log('should be 3')
+                    console.log(this.focusedIndex)
+                    console.log(document.activeElement)
+                  })
+
+                }
+                
+                // console.log('am i focusable after the mutation check if focusible next')
+                // cur = this._isFocusable(mutation.target) && this.focusable[this.focusedIndex + 1]
+                // console.log(cur)
+                // cur 
+                //   ? cur.focus()
+                //   : this.dialogRoot.focus()
               })
             }
           }
@@ -344,7 +380,8 @@ export default {
         this.observer.observe( this.dialogEl, {
           childList: true,
           subtree: true,
-          attributes: true
+          attributes: true,
+          attributeOldValue: true
         });
       } else {
         if (this.observer) {
