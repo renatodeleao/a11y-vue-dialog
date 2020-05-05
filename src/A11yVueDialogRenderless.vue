@@ -24,6 +24,7 @@ const getInitialState = () => ({
   closeEl: null,
   focusRef: null,
   focusable: [],
+  focusedIndex: -1,
   trigger: null,
   portalTarget: null,
   siblingsCount: 0,
@@ -101,6 +102,7 @@ export default {
           if (!hasRefs) return;
           
           this.toggleBackgroundScroll(true);
+          this.toggleFocusListener(true);
           this.getFocusableChildren();
           this.setInitialFocus(); 
 
@@ -115,6 +117,7 @@ export default {
      * when dialog is closed, removing observers and added attributes
      */
     handleClose() {
+      this.toggleFocusListener(false)
       this.toggleMutationObserver(false);
       this.toggleBackgroundScroll(false);
       this.toggleContentAriaAttrs(false);
@@ -266,13 +269,12 @@ export default {
      * @param {Event} event - keydown event.
      */
     trapFocus(event) {
-      const focusedItemIndex = this.focusable.indexOf(document.activeElement);
       const lastIndex = this.focusable.length - 1
 
       // If the SHIFT key is being pressed while tabbing (moving backwards) and
       // the currently focused item is the first one, move the focus to the last
       // focusable item from the dialog element
-      if (event.shiftKey && focusedItemIndex === 0) {
+      if (event.shiftKey && this.focusedIndex === 0) {
         this.focusable[lastIndex].focus();
         event.preventDefault();
         // If the SHIFT key is not being pressed (moving forwards) and the currently
@@ -280,11 +282,34 @@ export default {
         // from the dialog element
       } else if (
         !event.shiftKey &&
-        focusedItemIndex === lastIndex
+        this.focusedIndex === lastIndex
       ) {
         this.focusable[0].focus();
         event.preventDefault();
       }
+    },
+
+    /**
+     * Update state with current active element index on our internal
+     * focusable. This is used to trap focus and
+     * @see trapFocus
+     * @see toggleMutationObserver
+     */
+    handleFocus() {
+      this.focusedIndex = this.focusable.indexOf(document.activeElement)
+    },
+
+    /**
+     * add/remove focus listenser based on on open state. Note that watcher
+     * runs immediatly, so dom elements might not be in place.
+     * Does use window events so we can keep it locally scoped (nested dialogs)
+     */
+    toggleFocusListener(isOpen) {
+      if (!this.dialogRoot) return
+
+      isOpen 
+        ? this.dialogRoot.addEventListener('focus', this.handleFocus, true)
+        : this.dialogRoot.removeEventListener('focus', this.handleFocus, true)
     },
 
     /**
@@ -300,6 +325,16 @@ export default {
               // v-if might have happend, so listen for tick
               this.$nextTick(() => {
                 this.getFocusableChildren();
+
+                // if element was removed or hidden, since we filter these from focusableChildren array
+                // the same focusIndex will correspond now to next focusable element.
+                // and move focus there. if we remove and not else next, back to square one
+                // by a11y guidelines we always need one focusable el
+                const next = this.focusable[this.focusedIndex]
+            
+                next 
+                  ? next.focus() 
+                  : this.focusable[0].focus() 
               })
             }
           }

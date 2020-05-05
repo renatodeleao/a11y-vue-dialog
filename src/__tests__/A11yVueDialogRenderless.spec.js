@@ -1,8 +1,17 @@
 import { mount } from "@vue/test-utils";
 import A11yVueDialogRenderless from "../A11yVueDialogRenderless.vue";
 
+/**
+ * Gotachas:
+ *  [1] - _isVisible method uses el.offsetWidth, jsdom doesn't have layouting.
+ *  So we need to fake it and for our tests assum that all focus elements
+ *  are visible, till we refactor this test suite
+ *    @see https://github.com/jsdom/jsdom/issues/1048
+ */
 describe("A11yVueDialogRenderless", () => {
-  const stubbedClick = jest.fn()
+  // [1]
+  const mockIsVisible = jest.fn().mockReturnValue(true)
+  
   const methodsMock = {
     close: jest.fn(),
     handleKeyboard: jest.fn(),
@@ -11,11 +20,25 @@ describe("A11yVueDialogRenderless", () => {
   }
 
   /**
+   * And yet i finally found the reason for my method tests to be failing
+   * I was mocking the wrapper component, not The component itsel
+   * 🤦‍♂️
+   * @todo // [1]
+   */
+  const MockedA11yVueDialogRenderless = {
+    ...A11yVueDialogRenderless,
+    methods: {
+      ...A11yVueDialogRenderless.methods,
+      _isVisible: mockIsVisible
+    }
+  }
+
+  /**
    * https://vue-test-utils.vuejs.org/api/options.html#scopedslots
    */
   const WrapperComp = {
     components: {
-      A11yVueDialogRenderless
+      MockedA11yVueDialogRenderless
     },
     props: {
       showFocusRef: {
@@ -32,7 +55,7 @@ describe("A11yVueDialogRenderless", () => {
       isOpen: false,
     }),
     template: `
-      <A11yVueDialogRenderless
+      <MockedA11yVueDialogRenderless
         :open="isOpen"
         @close="$emit('close')"
         #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
@@ -89,7 +112,7 @@ describe("A11yVueDialogRenderless", () => {
             </div>
           </div>
         </portal>
-      </A11yVueDialogRenderless>
+      </MockedA11yVueDialogRenderless>
     `
   };
 
@@ -300,6 +323,12 @@ describe("A11yVueDialogRenderless", () => {
         const focusRefEl = _wrapper.find('[data-ref="focus"]')
         expect(focusRefEl.attributes('id')).toBe(document.activeElement.id)
       })
+
+      
+      /**
+       * @todo
+       */
+      // it('should run focus assignment again if current focus el is removed from the dom', () => {})
 
       /**
        * @todo
