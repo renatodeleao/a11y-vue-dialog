@@ -148,4 +148,4 @@ A playground is used to test the component locally. It uses [`vue/cli` instant p
 - Then, just run `yarn play` 
 
 ## License
-MITq
+MIT © Renato de Leão
