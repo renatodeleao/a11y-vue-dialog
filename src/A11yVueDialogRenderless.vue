@@ -24,6 +24,8 @@ const getInitialState = () => ({
   closeEl: null,
   focusRef: null,
   focusable: [],
+  focusableMutated: false,
+  focusableCopy: [],
   focusedIndex: -1,
   trigger: null,
   portalTarget: null,
@@ -270,6 +272,11 @@ export default {
      */
     trapFocus(event) {
       const lastIndex = this.focusable.length - 1
+      
+      if (this.focusableMutated) {
+        this.trapFocusAfterMutation(event)
+        return;
+      }
 
       // If the SHIFT key is being pressed while tabbing (moving backwards) and
       // the currently focused item is the first one, move the focus to the last
@@ -290,13 +297,67 @@ export default {
     },
 
     /**
+     * After mutation occured we need to manually set the next or previous
+     * focus element when tabing since focus trap have been lost to body.
+     * @see trapFocus
+     * @see handleFocus
+     * @see toggleMutationObserver
+     * @see [1] - We need to reverse array because find goes left to right
+     *  and we want to find the "first of the last".
+     * @see [2] - ⚠️ do not mutate internal variable
+     * 
+     * @todo - ask for help on a probably better diffing algo.
+     */
+    trapFocusAfterMutation(event) {
+      event.preventDefault(); // required
+
+      if (event.shiftKey) {
+        const possiblePrevs = this.focusableCopy
+          .slice(0, this.focusedIndex)
+          .reverse(); // [1]
+          
+        const prev =
+          this.focusable.length >= this.focusableCopy
+            ? this.focusable[this.focusedIndex - 1]
+            : this.focusable
+                .slice() // [2]
+                .reverse() // [1]
+                .find((prev) => possiblePrevs.includes(prev));
+
+        prev ? prev.focus() : this.focusable[0].focus()
+
+      } else {
+        const possibleNexts = this.focusableCopy.slice(this.focusedIndex + 1);
+        const next = 
+          this.focusable.length >= this.focusableCopy.length
+            ? this.focusable[this.focusedIndex]
+            : this.focusable.find(next => possibleNexts.includes(next))
+        
+        next 
+          ? next.focus()
+          : this.focusable[0].focus()
+      }
+
+      this.focusableMutated = false
+    },
+
+    /**
      * Update state with current active element index on our internal
      * focusable. This is used to trap focus and
      * @see trapFocus
-     * @see toggleMutationObserver
+     * @see trapFocusAfterMutation
+     * @see [1]toggleMutationObserver[1]
      */
     handleFocus() {
-      this.focusedIndex = this.focusable.indexOf(document.activeElement)
+      const isRoot = (
+        document.activeElement === this.backdropRef || 
+        document.activeElement === this.dialogRoot
+      )
+
+      // [1]
+      if(!isRoot || !this.focusableMutated) {
+        this.focusedIndex = this.focusable.indexOf(document.activeElement)
+      }
     },
 
     /**
@@ -316,26 +377,62 @@ export default {
      * A default MutationObserver to watch for dynamically added content
      * and possibly new focusable elements. Common usecases are dialogs
      * with asynchronous content and/or content hidden with v-if.
+     * 
+     * @see [1] - in result of an action,  current focused item element can
+     *   become unfocusable: either v-if or v-show, could be a button that
+     *   was disabled (the list goes one). Native behaviour is move focus to body.
+     *
+     *   The browser does keep the the next relevant focusible element reference 
+     *   somewhere, but it's not accessible from any DOM api.
+     *
+     *   So focus moved to body, our keys event stop working, meaning we cannot
+     *   close on escape. We need to restore focus to our dialog trap and for that we focus
+     *   on the root element. Triggering a focus() also trigger the handleFocus()
+     *   Calling that on dialogRoot would set focusedIndex to -1, becuase dialogRoot is not considered
+     *   a focus element. So before we do that we set up a flag that prevents handleFocus() from 
+     *   being called, that way we memorize the focusedIndex on its previous position.
+     *   That meorization + the focusableMutated allow to make trapFocus method do some 
+     *   specific positioning for this particular situation
+     * 
+     *   @see trapFocusAfterMutation
+     *   @see handleFocus
+     * 
+     * @see [2] - this can't be in next tick or our little shit focus algo will break
+     *   because it relies on a diff between to. And for some reason i'm yet to find
+     *   after nextTick they both become equal? Anyways i'm too tired and worked on 
+     *   this for too long. I'll improve in a next version.
      */
     toggleMutationObserver(isOpen){
       if (isOpen) {
         const callback = (mutationsList) => {
-          for(var mutation of mutationsList) {
-            if (mutation.type == 'childList' || mutation.type === 'attributes') {
+          for (var [i, mutation] of mutationsList.entries()) {
+            if (
+              mutation.type == "childList" ||
+              mutation.type === "attributes"
+            ) {
+              // [2]
+              this.focusableCopy = [...this.focusable]
               // v-if might have happend, so listen for tick
               this.$nextTick(() => {
                 this.getFocusableChildren();
 
-                // if element was removed or hidden, since we filter these from focusableChildren array
-                // the same focusIndex will correspond now to next focusable element.
-                // and move focus there. if we remove and not else next, back to square one
-                // by a11y guidelines we always need one focusable el
-                const next = this.focusable[this.focusedIndex]
-            
-                next 
-                  ? next.focus() 
-                  : this.focusable[0].focus() 
-              })
+                // a lot of mutations can be triggerd because subtree, we just want the
+                // state at the last one. Nope it's not the same as putting outside of 
+                // the loop. trust me, i've tried that.
+                if (i === mutationsList.length - 1) {
+                  if (document.activeElement === this.focusable[this.focusedIndex]) {
+                    return;
+                  }
+
+                  // [1]
+                  if (document.activeElement === document.body) {
+                    this.focusableMutated = true;
+
+                    // focus on root to keep keyboard bindings working
+                    this.dialogRoot.focus();
+                  }
+                }
+              });
             }
           }
         };

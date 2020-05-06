@@ -326,7 +326,7 @@ describe("A11yVueDialogRenderless", () => {
 
       
       /**
-       * @todo
+       * @todo good luck
        */
       // it('should run focus assignment again if current focus el is removed from the dom', () => {})
 

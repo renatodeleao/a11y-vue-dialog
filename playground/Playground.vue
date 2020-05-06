@@ -8,10 +8,24 @@
         @close="isOpen = false" 
         key="lonely"
         #default="{ focusRef }">
-        <button style="visibility:hidden">adasd</button>
-        <button v-show="submit" :class="{'remove': !submit}" @click="submit = !submit">Remove Me on submit</button>
-        <div v-show="!submit" style="margin-top: 20px">
-          <button >I'm nex</button>
+         <div v-if="submit2" style="margin-bottom: 20px">
+          <button disabled>prev</button>
+          <button disabled>other prev</button>
+          <button>Me</button>
+          <a href="#asd">I'm prev</a>
+          <button>Last preve</button>
+        </div>
+        <button @click="asyncAction2" :disabled="submitting2" v-if="!submit2">Remove me: prefix content</button>
+
+        <button :disabled="last">Simpaty prev disabled</button>
+        <button @click="last = true" :disabled="last">I tur me and sibling disabled</button>
+        <button v-if="!last">Simpaty disabled</button>
+
+        <button @click="asyncAction" :disabled="submitting " v-if="!submit">Remove Me on submit</button>
+        <div v-if="submit" style="margin-top: 20px">
+          <button disabled>I'm nex</button>
+          <button disabled>other</button>
+          <button>Me</button>
           <a href="#asd" v-bind="focusRef.props">I'm next ref</a>
           <button>Last</button>
         </div>
@@ -46,17 +60,40 @@ export default {
     // A11yVueDialogRenderless
   },
   data: () => ({
+    last: false,
     exOpen: false,
     exOpenTwo: false,
     isOpen: false,
     showThis: false,
-    submit: true
-  })
+    submit: false,
+    submitting: false,
+    submit2: false,
+    submitting2: false
+  }),
+  methods: {
+    asyncAction() {
+      this.submitting = true
+
+      setTimeout(() => {
+        this.submitting = false
+        this.submit = true
+      }, 2000)
+    },
+    asyncAction2() {
+      this.submitting2 = true
+
+      setTimeout(() => {
+        this.submitting2 = false
+        this.submit2 = true
+      }, 2000)
+    }
+  }
 }
 </script>
 
 <style>
-button:focus {
+button:focus,
+a:focus {
   outline: 2px solid red
 }
 </style>
