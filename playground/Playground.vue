@@ -48,6 +48,7 @@
 
 <script>
 /** eslint-disable */
+import 'focus-visible'
 import { PortalTarget } from "portal-vue";
 import DialogExample from "./DialogExample";
 
