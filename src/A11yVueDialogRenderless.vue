@@ -415,23 +415,40 @@ export default {
               // v-if might have happend, so listen for tick
               this.$nextTick(() => {
                 this.getFocusableChildren();
-
-                // a lot of mutations can be triggerd because subtree, we just want the
+                /**
+                 * Bugfix #23 - other plugins/code can attach focus/blur events to the
+                 * elements that we're watching, triggering attribute mutatations. blur()
+                 * event is particularly interesting because it sets document.activeElement
+                 * to body — which on or dialog plugin brain means a false positive for 
+                 * hide/remove mutation of the current tabbed item (remmeber if activeElement 
+                 * is body, button was removed or hidden, as in not focusable.)
+                 * 
+                 * focus-visible triggers blur() setting document.activeElement to body
+                 * for a brief moment and then back to the element again. Moving our
+                 * verification to the next queue with setTimeout workaround it.
+                 *
+                 * @see https://allyjs.io/tutorials/mutating-active-element.html
+                 */
+                setTimeout(() => {                
+                  // a lot of mutations can be triggerd because subtree, we just want the
+                  // state at the last one. Nope it's not the same as putting outside of 
                 // state at the last one. Nope it's not the same as putting outside of 
-                // the loop. trust me, i've tried that.
-                if (i === mutationsList.length - 1) {
-                  if (document.activeElement === this.focusable[this.focusedIndex]) {
-                    return;
-                  }
+                  // state at the last one. Nope it's not the same as putting outside of 
+                  // the loop. trust me, i've tried that.
+                  if (i === mutationsList.length - 1) {
+                    if (document.activeElement === this.focusable[this.focusedIndex]) {
+                      return;
+                    }
 
-                  // [1]
-                  if (document.activeElement === document.body) {
-                    this.focusableMutated = true;
+                    // [1]
+                    if (document.activeElement === document.body) {
+                      this.focusableMutated = true;
 
-                    // focus on root to keep keyboard bindings working
-                    this.dialogRoot.focus();
+                      // focus on root to keep keyboard bindings working
+                      this.dialogRoot.focus();
+                    }
                   }
-                }
+                })
               });
             }
           }
