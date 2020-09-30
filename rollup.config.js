@@ -9,6 +9,7 @@ import { terser } from 'rollup-plugin-terser';
 import postcss from 'postcss';
 import pkg from './package.json';
 
+const entry = './src/index.js'
 
 const external = Object.keys(pkg.dependencies || {});
 const postcssConfig = require('./postcss.config.js');
@@ -56,7 +57,7 @@ const banner = `
 export default [
 	// browser-friendly UMD build
 	{
-		input: pkg.main,
+		input: entry,
 		output: {
 			name: pkg.name,
 			file: pkg.browser,
@@ -68,7 +69,7 @@ export default [
 	},
 	// minified
 	{
-		input: pkg.main,
+		input: entry,
 		output: {
 			name: pkg.name,
 			file: `dist/${pkg.name}.umd.min.js`,
@@ -83,7 +84,7 @@ export default [
 	},
 	// module
 	{
-		input: pkg.main,
+		input: entry,
 		output: [
 			{ file: pkg.module, format: 'es' }
 		],
