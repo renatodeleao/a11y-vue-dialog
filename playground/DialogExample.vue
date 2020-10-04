@@ -5,42 +5,48 @@
     #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
   >
     <portal to="a11y-vue-dialogs">
-      <transition name="fade" mode="out-in" appear>
-        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
-          <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
-            <header>
-              <h1 v-bind="titleRef.props">Title</h1> 
-              <button 
-                v-bind="closeRef.props" 
-                v-on="closeRef.listeners"
-              >x
-              </button>
-            </header>
+        <focus-trap key="vamos">
 
-            <section>
-              <h2>Content</h2>
-              <button @click="innerTest = !innerTest">Show this</button>
-              <div v-if="innerTest">
-                with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
-              </div>
-              <slot v-bind="{ focusRef }"/>
-            </section>
+          <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
+
+            <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
+              <header>
+                <h1 v-bind="titleRef.props">Title</h1> 
+                <button 
+                  v-bind="closeRef.props" 
+                  v-on="closeRef.listeners"
+                >x
+                </button>
+              </header>
+
+              <section>
+                <h2>Content</h2>
+                <button @click="innerTest = !innerTest">Show this</button>
+                <div v-if="innerTest">
+                  with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
+                </div>
+                <slot v-bind="{ focusRef }"/>
+              </section>
+            </div>
+
           </div>
-        </div>
-      </transition>
+             </focus-trap>
     </portal>
   </a11y-vue-dialog-renderless>
+
 </template>
 
 <script>
 import { A11yVueDialogRenderless } from '../src/index'
 import { Portal } from "portal-vue";
+import { FocusTrap } from 'focus-trap-vue'
 
 export default {
   name: 'DialogExample',
   components: {
     A11yVueDialogRenderless,
-    Portal
+    Portal,
+    FocusTrap
   },
   extends: {A11yVueDialogRenderless},
   props: ['open', 'role'],
