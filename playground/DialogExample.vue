@@ -19,6 +19,7 @@
 
             <section>
               <h2>Content</h2>
+              <input type="text" autofocus placeholder="test" />
               <button @click="innerTest = !innerTest">Show this</button>
               <div v-if="innerTest">
                 with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working

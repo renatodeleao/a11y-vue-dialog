@@ -1,10 +1,10 @@
 ## Why another modal/dialog plugin
 
-- ✅ Accessibility first — Focus trap + keyboard navigation + aria-attributes
+- ✅ Accessibility first — Focus trap<sup>[1]</sup> + keyboard navigation + aria-attributes
 - ✅ Fully controlled component
 - ✅ Pure vue, no wrapping.
 - ✅ Simplicity + size
-- 🕸 Nested dialogs ([questionable pattern](https://github.com/edenspiekermann/a11y-dialog#nested-dialogs), not recommended, but possible because [it happens](https://cl.ly/be43f69393f7))
+- 🕸 Nested dialogs ([questionable pattern](https://github.com/edenspiekermann/a11y-dialog#nested-dialogs), not recommended, but possible because [it happens](https://cl.ly/be43f69393f7)) and it's actually in WAI-ARIA [examples](https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/dialog.html) so...
 - 🚧 _renderless version_
 
 Detailed documentation and additional info is available [at documentation site](https://renatodeleao.github.io/a11y-vue-dialog/)
@@ -146,6 +146,23 @@ export default {
 A playground is used to test the component locally. It uses [`vue/cli` instant prototyping feature](https://cli.vuejs.org/guide/prototyping.html), so the downside is that you have to install it globally. 
 
 - Then, just run `yarn play` 
+
+## Acknowledgements
+1. Since `v0.5.0` focus trap is powered by the awesome [`focus-trap`](https://github.com/focus-trap/focus-trap) — go and give them some ✨
+
+## Colophon
+Thanks to all this packages for inspiration and guidance.
+
+#### Dependencies
+
+1. Since `v0.5.0` focus trap is powered by the awesome [`focus-trap`](https://github.com/focus-trap/focus-trap) — go and give them some ✨
+1. [portal-vue](https://github.com/LinusBorg/portal-vue/) from @LinusBorg wich makes escape overflow traps like breeze
+
+#### Acknowledgements
+- a11y-dialog (vanilla) from @HugoGiraudel to lead the path that ended here
+- vue-a11y-dialog (wrapper around ^) from @morkro for the motivation to build a pure vue alternative to it.
+- vue-js-dialog a fully fledge massive dialog
+
 
 ## License
 MIT © Renato de Leão
