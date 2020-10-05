@@ -3,12 +3,15 @@ title: Introduction
 ---
 ## Why another modal/dialog plugin
 
-- ✅ Accessibility first — Focus trap + keyboard navigation + aria-attributes
+- ✅ Accessibility first — Focus trap<sup>[1]</sup> keyboard navigation + aria-attributes
 - ✅ Fully controlled component
 - ✅ Pure vue, no wrapping.
 - ✅ Simplicity + size
-- 🕸 Nested dialogs ([questionable pattern](https://github.com/edenspiekermann/a11y-dialog#nested-dialogs), not recommended, but possible because [it happens](https://cl.ly/be43f69393f7))
+- 🕸 Nested dialogs ([questionable pattern](https://github.com/edenspiekermann/a11y-dialog#nested-dialogs), not recommended, but possible because [it happens](https://cl.ly/be43f69393f7)) and it's actually in WAI-ARIA [examples](https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/dialog.html) so...
 - 🚧 _renderless version_
+
+#### Footnotes
+1. Since `v0.5.0` focus trap is powered by the awesome [`focus-trap`](https://github.com/focus-trap/focus-trap) — go and give them some ✨
 
 
 ## Why Not ...?

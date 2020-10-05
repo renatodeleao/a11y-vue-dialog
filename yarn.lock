@@ -5104,6 +5104,13 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
+focus-trap@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.1.1.tgz#61881b58e56783a7ca7331c6969336b986313594"
+  integrity sha512-sTTf6esJ2iCdn8WpUEB4LfJl7tvjGLASV3JmXbi7q1N5Ajjyk+65qZdrmjOF01s+/1v81rTNYZrsTeGha5KKpg==
+  dependencies:
+    tabbable "^5.1.0"
+
 focus-visible@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.1.0.tgz#4b9d40143b865f53eafbd93ca66672b3bf9e7b6a"
@@ -10817,6 +10824,11 @@ symbol-tree@^3.2.2:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
+
+tabbable@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.1.0.tgz#b81115168d0a8359ba69003b6a99d05f8480a664"
+  integrity sha512-Y3nSukchqM5UchuZjhj/WyE79Qb4RM/Vx3x3oHO3UYKKpf70Hy3iVRxb61MzCavN74aZsKzvPl4KNG8tQUAjFQ==
 
 table@^4.0.3:
   version "4.0.3"

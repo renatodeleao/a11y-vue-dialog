@@ -1,19 +1,7 @@
 <script>
-const noop = () => {};
+import { createFocusTrap } from 'focus-trap'
 
-const FOCUSABLE_ELEMENTS = [
-  'a[href]:not([tabindex^="-"]):not([inert])',
-  'area[href]:not([tabindex^="-"]):not([inert])',
-  'input:not([disabled]):not([inert])',
-  'select:not([disabled]):not([inert])',
-  'textarea:not([disabled]):not([inert])',
-  'button:not([disabled]):not([inert])',
-  'iframe:not([tabindex^="-"]):not([inert])',
-  'audio:not([tabindex^="-"]):not([inert])',
-  'video:not([tabindex^="-"]):not([inert])',
-  '[contenteditable]:not([tabindex^="-"]):not([inert])',
-  '[tabindex]:not([tabindex^="-"]):not([inert])'
-];
+const noop = () => {};
 
 /**
  * @see spyMouseDown|spyMouseUp - [1] 
@@ -23,11 +11,7 @@ const getInitialState = () => ({
   dialogEl: null,
   closeEl: null,
   focusRef: null,
-  focusable: [],
-  focusableMutated: false,
-  focusableCopy: [],
-  focusedIndex: -1,
-  trigger: null,
+  trap: null,
   portalTarget: null,
   siblingsCount: 0,
   mouseDownOrigin: null // [1]
@@ -69,6 +53,14 @@ export default {
     contentRoot: {
       type: [String, null],
       default: null
+    },
+    /**
+     * @desc focus-trap package configuration object
+     * @see {@link https://github.com/focus-trap/focus-trap#usage} 
+     */
+    focusTrapCreateOptions: {
+      type: Object,
+      default: () => ({})
     }
   },
   data: () => getInitialState(),
@@ -103,13 +95,10 @@ export default {
           // do no perform DOM actions if no DOM references
           if (!hasRefs) return;
 
+          this.toggleFocusTrap(true);
           this.toggleBackgroundScroll(true);
-          this.toggleFocusListener(true);
-          this.getFocusableChildren();
-          this.setInitialFocus(); 
-
+      
           this.lookForSiblings();
-          this.toggleMutationObserver(true);
           this.toggleContentAriaAttrs(true);
         })
       })
@@ -119,14 +108,9 @@ export default {
      * when dialog is closed, removing observers and added attributes
      */
     handleClose() {
-      this.toggleFocusListener(false)
-      this.toggleMutationObserver(false);
+      this.toggleFocusTrap(false);
       this.toggleBackgroundScroll(false);
       this.toggleContentAriaAttrs(false);
-
-      if (this.trigger) {
-        this.trigger.focus();
-      }
 
       this.resetData();
     },
@@ -147,10 +131,6 @@ export default {
         if (target.type === 'search' && target.value !== '') return
 
         this.close(e)
-      }
-
-      if (e.key === 'Tab') {
-        this.trapFocus(e)
       }
     },
 
@@ -183,7 +163,6 @@ export default {
      * @returns {Boolean} performs checks for other ref dependend methods
      */
     getDOMRefs() {
-      this.trigger = document.activeElement;
       this.dialogRoot = document.querySelector(`[data-id="a11y-vue-dialog-${this._uid}"]`);
 
       if (this.dialogRoot) {
@@ -207,267 +186,31 @@ export default {
       Object.assign(this.$data, resetData)
     },
 
-    //-////////////////////////////////////////////////////////////////////////
-    // ACESSIBILITY
-    // 
-    // All credits to Hugo Giraudel for this
-    // https://github.com/edenspiekermann/a11y-dialog
-    // 
-    //-///////////////////////////////////////////////////////////////////////
-      
     /**
-     * Get all focusable element inside dialog
-     * @see [1] - Authors SHOULD ensure that all dialogs (both modal and 
-     *  non-modal) have at least one focusable descendant element. Authors 
-     *  SHOULD focus an element in the modal dialog when it is displayed, 
-     *   and authors SHOULD manage focus of modal dialogs.
-     *  {@link https://www.w3.org/TR/wai-aria-1.1/#dialog}
+     * @see [FT1] - provided initial focus not found, it won't get the first focusable children
+     *   {@link https://github.com/focus-trap/focus-trap/issues/113}
+     * @see [FT2] - if click outside an focusable element, but inside dialog body, (do not focus 
+     *   first focus element (close button), it's weird. But keep focus within dialog. It's overrideable
+     *   via focusTrapCreateOptions
+     *   {@link }
      */
-    getFocusableChildren() {
-      this.focusable = Array.from(
-        this.dialogEl.querySelectorAll(FOCUSABLE_ELEMENTS.join(','))
-      ).filter(this._isFocusable)
-
-      // [1]
-      if (!this.focusable.length) {
-        console.warn('All dialogs must have at least on focusable descendent: https://www.w3.org/TR/wai-aria-1.1/#dialog')
-      }
-    },
-    
-    /**
-     * Unless a condition where doing otherwise is advisable, focus is initially set on the 
-     * first focusable element:
-     *   ”first non-inert focusable area in subject’s control group whose DOM anchor has an 
-     *   autofocus attribute specified“
-     * 
-     * @see FOCUSABLE_ELEMENTS
-     * @see https://www.w3.org/TR/html52/interactive-elements.html#elementdef-dialog
-     * @see https://www.w3.org/TR/wai-aria-practices/#dialog_modal
-     */
-    setA11yFocus() {
-      const firstAutoFocusEl = this.focusable.find(el => el.autofocus)
-      firstAutoFocusEl 
-        ? firstAutoFocusEl.focus()
-        : this.focusable[0].focus()
-    },
-
-    /**
-     * If a valid focusRef is provided, we'll move focus on that, else
-     * we fallback to WAI ARIA guidelines. (<span></span> is not focusable )
-     * @see https://www.w3.org/TR/wai-aria-practices/#dialog_modal
-     */
-    setInitialFocus() {
-      if (this.focusRef && this._isFocusable(this.focusRef)) {
-        this.focusRef.focus() 
-      } else {
-        this.setA11yFocus()
-      }
-    },
-    
-    /**
-     * Trap the focus inside the dialog to allow user to navigation dialog content
-     * using the keyboard without loosing focus.
-     *
-     * @param {Event} event - keydown event.
-     */
-    trapFocus(event) {
-      const lastIndex = this.focusable.length - 1
-      
-      if (this.focusableMutated) {
-        this.trapFocusAfterMutation(event)
-        return;
-      }
-
-      // If the SHIFT key is being pressed while tabbing (moving backwards) and
-      // the currently focused item is the first one, move the focus to the last
-      // focusable item from the dialog element
-      if (event.shiftKey && this.focusedIndex === 0) {
-        this.focusable[lastIndex].focus();
-        event.preventDefault();
-        // If the SHIFT key is not being pressed (moving forwards) and the currently
-        // focused item is the last one, move the focus to the first focusable item
-        // from the dialog element
-      } else if (
-        !event.shiftKey &&
-        this.focusedIndex === lastIndex
-      ) {
-        this.focusable[0].focus();
-        event.preventDefault();
-      }
-    },
-
-    /**
-     * After mutation occured we need to manually set the next or previous
-     * focus element when tabing since focus trap have been lost to body.
-     * @see trapFocus
-     * @see handleFocus
-     * @see toggleMutationObserver
-     * @see [1] - We need to reverse array because find goes left to right
-     *  and we want to find the "first of the last".
-     * @see [2] - ⚠️ do not mutate internal variable
-     * 
-     * @todo - ask for help on a probably better diffing algo.
-     */
-    trapFocusAfterMutation(event) {
-      event.preventDefault(); // required
-
-      if (event.shiftKey) {
-        const possiblePrevs = this.focusableCopy
-          .slice(0, this.focusedIndex)
-          .reverse(); // [1]
-          
-        const prev =
-          this.focusable.length >= this.focusableCopy
-            ? this.focusable[this.focusedIndex - 1]
-            : this.focusable
-                .slice() // [2]
-                .reverse() // [1]
-                .find((prev) => possiblePrevs.includes(prev));
-
-        prev ? prev.focus() : this.focusable[0].focus()
-
-      } else {
-        const possibleNexts = this.focusableCopy.slice(this.focusedIndex + 1);
-        const next = 
-          this.focusable.length >= this.focusableCopy.length
-            ? this.focusable[this.focusedIndex]
-            : this.focusable.find(next => possibleNexts.includes(next))
-        
-        next 
-          ? next.focus()
-          : this.focusable[0].focus()
-      }
-
-      this.focusableMutated = false
-    },
-
-    /**
-     * Update state with current active element index on our internal
-     * focusable. This is used to trap focus and
-     * @see trapFocus
-     * @see trapFocusAfterMutation
-     * @see [1]toggleMutationObserver[1]
-     */
-    handleFocus() {
-      const isRoot = (
-        document.activeElement === this.backdropRef || 
-        document.activeElement === this.dialogRoot
-      )
-
-      // [1]
-      if(!isRoot || !this.focusableMutated) {
-        this.focusedIndex = this.focusable.indexOf(document.activeElement)
-      }
-    },
-
-    /**
-     * add/remove focus listenser based on on open state. Note that watcher
-     * runs immediatly, so dom elements might not be in place.
-     * Does use window events so we can keep it locally scoped (nested dialogs)
-     */
-    toggleFocusListener(isOpen) {
-      if (!this.dialogRoot) return
-
-      isOpen 
-        ? this.dialogRoot.addEventListener('focus', this.handleFocus, true)
-        : this.dialogRoot.removeEventListener('focus', this.handleFocus, true)
-    },
-
-    /**
-     * A default MutationObserver to watch for dynamically added content
-     * and possibly new focusable elements. Common usecases are dialogs
-     * with asynchronous content and/or content hidden with v-if.
-     * 
-     * @see [1] - in result of an action,  current focused item element can
-     *   become unfocusable: either v-if or v-show, could be a button that
-     *   was disabled (the list goes one). Native behaviour is move focus to body.
-     *
-     *   The browser does keep the the next relevant focusible element reference 
-     *   somewhere, but it's not accessible from any DOM api.
-     *
-     *   So focus moved to body, our keys event stop working, meaning we cannot
-     *   close on escape. We need to restore focus to our dialog trap and for that we focus
-     *   on the root element. Triggering a focus() also trigger the handleFocus()
-     *   Calling that on dialogRoot would set focusedIndex to -1, becuase dialogRoot is not considered
-     *   a focus element. So before we do that we set up a flag that prevents handleFocus() from 
-     *   being called, that way we memorize the focusedIndex on its previous position.
-     *   That meorization + the focusableMutated allow to make trapFocus method do some 
-     *   specific positioning for this particular situation
-     * 
-     *   @see trapFocusAfterMutation
-     *   @see handleFocus
-     * 
-     * @see [2] - this can't be in next tick or our little shit focus algo will break
-     *   because it relies on a diff between to. And for some reason i'm yet to find
-     *   after nextTick they both become equal? Anyways i'm too tired and worked on 
-     *   this for too long. I'll improve in a next version.
-     */
-    toggleMutationObserver(isOpen){
-      if (isOpen) {
-        const callback = (mutationsList) => {
-          for (var [i, mutation] of mutationsList.entries()) {
-            if (
-              mutation.type == "childList" ||
-              mutation.type === "attributes"
-            ) {
-              // [2]
-              this.focusableCopy = [...this.focusable]
-              // v-if might have happend, so listen for tick
-              this.$nextTick(() => {
-                this.getFocusableChildren();
-                /**
-                 * Bugfix #23 - other plugins/code can attach focus/blur events to the
-                 * elements that we're watching, triggering attribute mutatations. blur()
-                 * event is particularly interesting because it sets document.activeElement
-                 * to body — which on or dialog plugin brain means a false positive for 
-                 * hide/remove mutation of the current tabbed item (remmeber if activeElement 
-                 * is body, button was removed or hidden, as in not focusable.)
-                 * 
-                 * focus-visible triggers blur() setting document.activeElement to body
-                 * for a brief moment and then back to the element again. Moving our
-                 * verification to the next queue with setTimeout workaround it.
-                 *
-                 * @see https://allyjs.io/tutorials/mutating-active-element.html
-                 */
-                setTimeout(() => {                
-                  // a lot of mutations can be triggerd because subtree, we just want the
-                  // state at the last one. Nope it's not the same as putting outside of 
-                // state at the last one. Nope it's not the same as putting outside of 
-                  // state at the last one. Nope it's not the same as putting outside of 
-                  // the loop. trust me, i've tried that.
-                  if (i === mutationsList.length - 1) {
-                    if (document.activeElement === this.focusable[this.focusedIndex]) {
-                      return;
-                    }
-
-                    // [1]
-                    if (document.activeElement === document.body) {
-                      this.focusableMutated = true;
-
-                      // focus on root to keep keyboard bindings working
-                      this.dialogRoot.focus();
-                    }
-                  }
-                })
-              });
-            }
+    toggleFocusTrap(toggle) {
+      if (toggle) {
+        this.trap = createFocusTrap(
+          this.dialogEl,
+          {
+            escapeDeactivates: false,
+            allowOutsideClick: true,
+            initialFocus: this.focusRef || this.dialogEl.querySelector('[autofocus]'), // [FT1]
+            fallbackFocus: this.dialogEl, // [FT2]
+            ...this.focusTrapCreateOptions
           }
-        };
-
-        this.observer = new MutationObserver(callback);
-        this.observer.observe( this.dialogEl, {
-          childList: true,
-          subtree: true,
-          attributes: true
-        });
+        )
+        this.trap.activate()
       } else {
-        if (this.observer) {
-          this.observer.disconnect();
-          this.$delete(this.observer);
-        }
+        if (this.trap) this.trap.deactivate()
       }
     },
-
 
     /**
      * Toggling aria-hidden on content other than dialog.
@@ -526,37 +269,6 @@ export default {
     },
 
     /**
-     * Straight from jQuery :visible. Also accounts for cases where a parent
-     * wrapper might be hidden (v-show) and no the element itself
-     * @author jQuery
-     * @see https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
-     * @see https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
-     */
-   _isVisible(element) {
-      return !!(
-        element.offsetWidth ||
-        element.offsetHeight ||
-        element.getClientRects().length
-      );
-    },
-
-    _isNotInert(element) {
-      return element.matches(FOCUSABLE_ELEMENTS)
-    },
-
-    /**
-     * If the element is present in the gathered DOM focusable elements
-     * collection. If yes than it is considered Focusable
-     * @param {HTMLElement} element
-     */
-    _isFocusable(element) {
-      return (
-        this._isNotInert(element) &&
-        this._isVisible(element)
-      )
-    },
-
-    /**
      * Prevents mouseup that started inside (dialogRef mousedown) to bubble 
      * and trigger backdrop click, consequentially closing the dialog. 
      * 
@@ -607,6 +319,7 @@ export default {
   },
 
   destroyed() {
+    this.toggleFocusTrap(false);
     this.resetData()
   },
 
@@ -654,6 +367,7 @@ export default {
           role: this.role,
           'data-ref': 'dialog',
           'aria-labelledby': `${this.id}-title`,
+          tabindex: '-1' // [FT2]
         },
         listeners: {
           click: this._stopPropagation,

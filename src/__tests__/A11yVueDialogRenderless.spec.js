@@ -280,62 +280,6 @@ describe("A11yVueDialogRenderless", () => {
   })
 
   describe('behaviour', () => {
-    describe('focus', () => {
-
-      it('should focus on first focusable child unless a rule stating otherwiser', async () => {
-        const _wrapper = mountWithOptions({
-          data: () => ({ isOpen: true })
-        })
-
-        // watch out for v-if
-        await _wrapper.vm.$nextTick()
-
-        const firstFocusableChildMock = _wrapper.find('[data-ref="close"]')
-        expect(firstFocusableChildMock.attributes('data-ref')).toBe(document.activeElement.getAttribute('data-ref'))
-      })
-
-      it('should set initial focus on the first element with autofocus attribute, if it exists', async () => {
-        const _wrapper = mountWithOptions({
-          propsData: {
-            showAutofocusEl: true
-          },
-          data: () => ({ isOpen: true })
-        })
-
-        // watch out for v-if
-        await _wrapper.vm.$nextTick()
-
-        const autofocusEl = _wrapper.find('[autofocus]')
-        expect(autofocusEl.attributes('id')).toBe(document.activeElement.id)
-      })
-
-      it('should set focus on the focusRef bound element, if it exists and is non-inert', async () => {
-        const _wrapper = mountWithOptions({
-          propsData: {
-            showFocusRef: true
-          },
-          data: () => ({ isOpen: true })
-        })
-
-        // watch out for v-if
-        await _wrapper.vm.$nextTick()
-
-        const focusRefEl = _wrapper.find('[data-ref="focus"]')
-        expect(focusRefEl.attributes('id')).toBe(document.activeElement.id)
-      })
-
-      
-      /**
-       * @todo good luck
-       */
-      // it('should run focus assignment again if current focus el is removed from the dom', () => {})
-
-      /**
-       * @todo
-       */
-      // it('should trap focus within dialog tab + shift + tab key', () => {})
-    })
-
     describe('scroll', () => {
       it('should prevent body scrolling if preventBackgroundScrolling is set to true on open', async () => {
         const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
