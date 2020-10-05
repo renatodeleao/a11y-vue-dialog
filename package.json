@@ -68,6 +68,7 @@
     "src"
   ],
   "dependencies": {
+    "focus-trap": "^6.1.1",
     "portal-vue": "^1.5.1"
   },
   "resolutions": {
