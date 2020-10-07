@@ -2,6 +2,8 @@
 import { createFocusTrap } from 'focus-trap'
 
 const noop = () => {};
+// @see [FT3]
+const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus], textarea[autofocus]'
 
 /**
  * @see spyMouseDown|spyMouseUp - [1] 
@@ -192,7 +194,12 @@ export default {
      * @see [FT2] - if click outside an focusable element, but inside dialog body, (do not focus 
      *   first focus element (close button), it's weird. But keep focus within dialog. It's overrideable
      *   via focusTrapCreateOptions
-     *   {@link }
+     * @see [FT3]
+     *   Some input components wrappers might inheriting attributes, meaning
+     *   some <div autofocus> — this is an invalid focusable element — but we 
+     *   were getting it anyways, and focus-trap doesn't validate (and i agree)
+     *   element so we changed our query to only select valid ones.
+     *   @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes}
      */
     toggleFocusTrap(toggle) {
       if (toggle) {
@@ -201,7 +208,7 @@ export default {
           {
             escapeDeactivates: false,
             allowOutsideClick: true,
-            initialFocus: this.focusRef || this.dialogEl.querySelector('[autofocus]'), // [FT1]
+            initialFocus: this.focusRef || this.dialogEl.querySelector(AUTOFOCUS_QUERY), // [FT1] [FT3]
             fallbackFocus: this.dialogEl, // [FT2]
             ...this.focusTrapCreateOptions
           }
