@@ -40,7 +40,7 @@ export default {
     },
     /**
      * @desc accessibilty attribute: possible usage as modal. If "alertdialog"
-     * will not close on "Escape" key or backdrop click.
+     * will not close on backdrop click.
      * @see https://github.com/edenspiekermann/a11y-dialog#usage-as-a-modal
      */
     role: {
@@ -128,7 +128,7 @@ export default {
       
       const { key, target } = e;
 
-      if (key === 'Escape' && this.role !== 'alertdialog') {
+      if (key === 'Escape') {
         // do not interfere with native input behaviour
         if (target.type === 'search' && target.value !== '') return
 
