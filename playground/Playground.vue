@@ -35,7 +35,7 @@
       <DialogExample :open="exOpen" @close="exOpen = false" key="parent">
         <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
         <DialogExample :open="exOpenTwo" @close="exOpenTwo = false" role="alertdialog" key="nested">
-          <h3>This wont' close with escape since it's an alertdialog</h3>
+          <h3>This wont' on backdrop click since it's an alertdialog, and backdrop is outside dialog</h3>
         </DialogExample>
       </DialogExample>
     </main>
