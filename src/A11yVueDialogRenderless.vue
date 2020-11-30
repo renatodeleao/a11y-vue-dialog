@@ -32,13 +32,6 @@ export default {
       default: false
     },
     /**
-     * @desc add overflow hidden to app root
-     */
-    preventBackgroundScrolling: {
-      type: Boolean,
-      default: true
-    },
-    /**
      * @desc accessibilty attribute: possible usage as modal. If "alertdialog"
      * will not close on backdrop click.
      * @see https://github.com/edenspiekermann/a11y-dialog#usage-as-a-modal
@@ -98,9 +91,9 @@ export default {
           if (!hasRefs) return;
 
           this.toggleFocusTrap(true);
-          this.toggleBackgroundScroll(true);
-      
+  
           this.lookForSiblings();
+          this.toggleVisibilityEvents(true);
           this.toggleContentAriaAttrs(true);
         })
       })
@@ -111,7 +104,7 @@ export default {
      */
     handleClose() {
       this.toggleFocusTrap(false);
-      this.toggleBackgroundScroll(false);
+      this.toggleVisibilityEvents(false);
       this.toggleContentAriaAttrs(false);
 
       this.resetData();
@@ -145,18 +138,19 @@ export default {
     },
 
     /**
-     * @see [1] Prevents scrollbar jump
+     * Usefull events for side-effects on open/close like preventing
+     * background content scroll with a custom solution.
+     * Overflow:hidden on body might not produce the desired effects
+     * within nested contained content.
+     * @event show
+     * @event hide
      */
-    toggleBackgroundScroll(isOpen) {
-      if (this.preventBackgroundScrolling) {
-        if (this.siblingsCount > 1) return; // translates to: one dialog is already open
-        
-        const bodyStyle = document.body.style;
+    toggleVisibilityEvents(isOpen) {         
+      const hasSiblings = this.siblingsCount > 1
 
-        isOpen 
-          ? bodyStyle.setProperty("overflow", "hidden")
-          : bodyStyle.removeProperty("overflow", "hidden")
-      }
+      return isOpen 
+        ? this.$emit('show', hasSiblings)
+        : this.$emit('hide', hasSiblings)
     },
     
     /**
