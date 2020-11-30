@@ -1,7 +1,7 @@
 <template>
   <a11y-vue-dialog-renderless 
     v-bind="$props"
-    @close="$emit('close')"
+    v-on="$listeners"
     #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
   >
     <portal to="a11y-vue-dialogs">

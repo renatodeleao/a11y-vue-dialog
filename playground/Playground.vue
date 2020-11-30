@@ -32,12 +32,36 @@
       </DialogExample>
 
       <button @click="exOpen = !exOpen">Nexted Example</button>
-      <DialogExample :open="exOpen" @close="exOpen = false" key="parent">
+      <DialogExample :open="exOpen" @close="exOpen = false" key="parent" 
+        @show="preventBodyScroll(true, $event)"
+        @hide="preventBodyScroll(false, $event)"
+      >
         <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
-        <DialogExample :open="exOpenTwo" @close="exOpenTwo = false" role="alertdialog" key="nested">
+        <DialogExample 
+          :open="exOpenTwo" 
+          @close="exOpenTwo = false" 
+          role="alertdialog" 
+          key="nested"
+          @show="preventBodyScroll(true, $event)"
+          @hide="preventBodyScroll(false, $event)"
+        >
           <h3>This wont' on backdrop click since it's an alertdialog, and backdrop is outside dialog</h3>
         </DialogExample>
       </DialogExample>
+
+      <h1>{{ "make it scroll".repeat(100) }}</h1>
+
+      <button @click="showDialog('preventScroll')">Nexted Example</button>
+      <DialogExample 
+        :open="examples.preventScroll" 
+        @close="closeDialog('preventScroll')" 
+        @show="preventBodyScroll(true, $event)"
+        @hide="preventBodyScroll(false, $event)"
+      >
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
+      </DialogExample>
+
+      <h1>{{ "make it scroll".repeat(100) }}</h1>
     </main>
     
 
@@ -69,7 +93,10 @@ export default {
     submit: false,
     submitting: false,
     submit2: false,
-    submitting2: false
+    submitting2: false,
+    examples: {
+      preventScroll: false
+    }
   }),
   methods: {
     asyncAction() {
@@ -87,6 +114,20 @@ export default {
         this.submitting2 = false
         this.submit2 = true
       }, 2000)
+    },
+    showDialog(key) {
+      this.$set(this.examples, key, true)
+    },
+    closeDialog(key) {
+      this.$set(this.examples, key, false)
+    },
+
+    preventBodyScroll(bool, hasSiblings) {
+      if (hasSiblings) return // do nothing
+
+      bool 
+        ? document.body.style.overflow = 'hidden'
+        : document.body.style.overflow = ''
     }
   }
 }
