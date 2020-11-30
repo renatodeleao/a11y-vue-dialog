@@ -164,10 +164,6 @@ describe("A11yVueDialogRenderless", () => {
       expect(wrapper.props('role')).toBe('dialog')
     })
 
-    it('should have "preventBackgroundScrolling" prop set to "true" by default', () => {
-      expect(wrapper.props('preventBackgroundScrolling')).toBe(true)
-    })
-
     it('displays markup when it’s open', () => {
       expect(openWrapper.props('open')).toBe(true);
       expect(openWrapper.find('.mock-dialog').exists()).toBeTruthy()
@@ -280,19 +276,21 @@ describe("A11yVueDialogRenderless", () => {
   })
 
   describe('behaviour', () => {
-    describe('scroll', () => {
-      it('should prevent body scrolling if preventBackgroundScrolling is set to true on open', async () => {
+    describe('events', () => {
+      it('should emit show/hide events on open with hasSiblings boolean', async () => {
         const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
 
         await _wrapper.vm.$nextTick()
-
-        expect(document.body.style.overflow).toBe('hidden')
+        
+        expect(_wrapper.emitted().show).toBeTruthy()
+        expect(_wrapper.emitted().show[0][0]).toBe(false) // hasSiblings
         
         _wrapper.setProps({ open: false })
         
         await _wrapper.vm.$nextTick()
         
-        expect(document.body.style.overflow).toBe('')        
+        expect(_wrapper.emitted().hide).toBeTruthy()
+        expect(_wrapper.emitted().hide[0][0]).toBe(false) // hasSiblings
       })
     })
 
