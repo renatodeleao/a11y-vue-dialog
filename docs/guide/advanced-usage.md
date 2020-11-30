@@ -42,7 +42,7 @@ import { A11yVueDialog } from "a11y-vue-dialog";
 
 export default {
   name: "your-component",
-  components: {
+  components: {
     "app-dialog": A11yVueDialog
   },
   data () => ({

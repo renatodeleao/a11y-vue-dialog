@@ -30,7 +30,7 @@ export default {
 ### `@show`
 When dialog becomes visible
 ```html
-<a11y-vue-dialog :open="dialogOpen" @show="somethingOnShow">
+<a11y-vue-dialog :open="dialogOpen" @show="onShow">
 this goes to the default slots
 </a11-vue-dialog>
 ```
@@ -38,7 +38,25 @@ this goes to the default slots
 ```js
 export default {
   methods: {
-    onShow(e){
+    onShow(e, hasSiblings){
+      console.log("I'm alive!")
+    }
+  }
+}
+```
+
+### `@hide`
+When dialog becomes visible
+```html
+<a11y-vue-dialog :open="dialogOpen" @hide="onHide">
+this goes to the default slots
+</a11-vue-dialog>
+```
+
+```js
+export default {
+  methods: {
+    onHide(e, hasSiblings){
       console.log("I'm alive!")
     }
   }

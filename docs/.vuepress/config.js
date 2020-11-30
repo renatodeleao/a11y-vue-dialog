@@ -30,6 +30,7 @@ module.exports = {
       ['/guide/slots', "Slots"],
       ['/guide/events', "Events"],
       ['/guide/portal-vue', "Why portal-vue?"],
+      ['/guide/prevent-background-scrolling', "Prevent background scrolling"],
       ['/guide/thanks', "Thanks"],
     ]
   }
