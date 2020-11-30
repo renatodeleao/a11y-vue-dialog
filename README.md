@@ -147,9 +147,6 @@ A playground is used to test the component locally. It uses [`vue/cli` instant p
 
 - Then, just run `yarn play` 
 
-## Acknowledgements
-1. Since `v0.5.0` focus trap is powered by the awesome [`focus-trap`](https://github.com/focus-trap/focus-trap) — go and give them some ✨
-
 ## Colophon
 Thanks to all this packages for inspiration and guidance.
 
