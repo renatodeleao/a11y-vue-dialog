@@ -72,5 +72,8 @@
   },
   "resolutions": {
     "js-yaml": "^3.11.1"
+  },
+  "optionalDependencies": {
+    "@linusborg/vue-simple-portal": "^0.1.5"
   }
 }
