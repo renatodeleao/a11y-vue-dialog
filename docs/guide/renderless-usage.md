@@ -21,12 +21,12 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
 ```html
 <template>
   <!-- compose into you own markup, MyDialog.vue -->
-  <a11y-vue-dialog-renderless 
-    v-bind="$props"
-    @close="$emit('close')"
-    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
-  >
-    <portal to="a11y-vue-dialogs" v-if="open">
+  <portal to="a11y-vue-dialogs" v-if="open">
+    <a11y-vue-dialog-renderless 
+      v-bind="$props"
+      v-bind="$listeners"
+      #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+    >
       <div class="youclasses" 
         v-bind="backdropRef.props" 
         v-on="backdropRef.listeners"
@@ -58,8 +58,8 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
           </footer>
         </div>
       </div>
-    </portal>
-  </a11y-vue-dialog-renderless>
+    </a11y-vue-dialog-renderless>
+  </portal>
 </template>
 
 <script>

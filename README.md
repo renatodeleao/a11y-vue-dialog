@@ -62,12 +62,12 @@ A renderless version provides all the functionality required to build a proper `
 ```html
 <!-- compose into you own markup, MyDialog.vue -->
 <template>
-  <a11y-vue-dialog-renderless 
-    v-bind="$props"
-    @close="$emit('close')"
-    #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
-  >
-    <portal to="a11y-vue-dialogs" v-if="open">
+  <portal to="a11y-vue-dialogs" v-if="open">
+    <a11y-vue-dialog-renderless 
+      v-bind="$props"
+      v-bind="$listeners"
+      #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+    >
       <div class="youclasses" 
         v-bind="backdropRef.props" 
         v-on="backdropRef.listeners"
@@ -99,8 +99,8 @@ A renderless version provides all the functionality required to build a proper `
           </footer>
         </div>
       </div>
-    </portal>
-  </a11y-vue-dialog-renderless>
+    </a11y-vue-dialog-renderless>
+  </portal>
 </template>
 
 <script>
@@ -140,6 +140,34 @@ export default {
 
 - Here's a [codesandbox to play with](https://codesandbox.io/s/renderless-a11y-vue-dialog-q5lqk?file=/src/components/DialogConfirm.vue)
 - Checkout [this example](https://github.com/edenspiekermann/a11y-dialog#expected-dom-structure) for what's the minimum expected markup for an accessible dialog
+
+
+### Usage with <transition>
+> When you use a <transition> as the root element of the portal and then remove the portal (i.e. with v-if) or set its disabled prop to true, no leave transition will happen.
+> While this is to expected, as the same thing would happen if you removed a div that contains a <transition>, it often trips people up, which is why it's mentioned here.
+> [vue-simple-portal](https://github.com/LinusBorg/vue-simple-portal#transitions)
+
+_if you really need to apply the `v-if` to portal, check the example in the link above_
+
+But based on the info above, this also works fine: 
+
+```html
+  <portal to="a11y-vue-dialogs">
+    <!-- 
+      [1] note the v-if is applied to transition not portal.
+          could also be applied to the component itself
+    -->
+    <transition name="fade" appear v-if="open">
+      <a11y-vue-dialog-renderless 
+        v-bind="$props"
+        v-bind="$listeners"
+        #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+      >
+        <!-- your implementation -->
+      </a11y-vue-dialog-renderless>
+    </transition>
+  </portal>
+```
 
 ## Play
 
