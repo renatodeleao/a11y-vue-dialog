@@ -133,8 +133,8 @@ export default {
      * @event Close - event for closing the dialog on the parent.
      * Internal side-effects are handled in "open" prop watcher
      */
-    close() {
-      this.$emit('close');
+    close(event) {
+      this.$emit('close', event);
     },
 
     /**
