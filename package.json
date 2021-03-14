@@ -1,6 +1,6 @@
 {
   "name": "a11y-vue-dialog",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "An accessible dialog component made for Vue",
   "repository": {
     "type": "git",
