@@ -31,10 +31,11 @@
         </div>
       </DialogExample>
 
-      <button @click="exOpen = !exOpen">Nexted Example</button>
+      <button @click="exOpen = !exOpen">Nested Example</button>
       <DialogExample :open="exOpen" @close="exOpen = false" key="parent"
         @show="preventBodyScroll(true, $event)"
         @hide="preventBodyScroll(false, $event)"
+        :use-simple-portal="true"
       >
         <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
         <DialogExample
@@ -42,6 +43,7 @@
           @close="exOpenTwo = false"
           role="alertdialog"
           key="nested"
+          :use-simple-portal="true"
           @show="preventBodyScroll(true, $event)"
           @hide="preventBodyScroll(false, $event)"
         >
@@ -61,12 +63,22 @@
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
       </DialogExample>
 
+      <button @click="showDialog('useSimplePortal')">Use simple portal</button>
+      <DialogExample
+        :open="examples.useSimplePortal"
+        :use-simple-portal="true"
+        @close="closeDialog('useSimplePortal')"
+      >
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
+      </DialogExample>
+
       <h1>{{ "make it scroll".repeat(100) }}</h1>
     </main>
 
 
     <!-- render at end of root -->
     <portal-target name="a11y-vue-dialogs" multiple />
+    <div id="a11y-vue-dialogs" />
   </div>
 </template>
 
@@ -95,7 +107,8 @@ export default {
     submit2: false,
     submitting2: false,
     examples: {
-      preventScroll: false
+      preventScroll: false,
+      useSimplePortal: false
     }
   }),
   methods: {

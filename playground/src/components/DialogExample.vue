@@ -1,12 +1,15 @@
 <template>
-  <a11y-vue-dialog-renderless
-    v-bind="$props"
-    v-on="$listeners"
-    #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+  <component
+    :is="useSimplePortal ? 'simple-portal' : 'portal'"
+    :to="!useSimplePortal && 'a11y-vue-dialogs'"
   >
-    <portal to="a11y-vue-dialogs">
-      <transition name="fade" mode="out-in" appear>
-        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
+    <transition name="fade" mode="out-in" appear v-if="open">
+      <a11y-vue-dialog-renderless
+        v-bind="$props"
+        v-on="$listeners"
+        #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+      >
+        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners">
           <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
             <header>
               <h1 v-bind="titleRef.props">Title</h1>
@@ -31,26 +34,29 @@
             </section>
           </div>
         </div>
-      </transition>
-    </portal>
-  </a11y-vue-dialog-renderless>
+      </a11y-vue-dialog-renderless>
+    </transition>
+  </component>
 </template>
 
 <script>
 import { A11yVueDialogRenderless } from '../../../src/index'
 import { Portal } from "portal-vue";
+import { Portal as SimplePortal } from "@linusborg/vue-simple-portal";
 
 export default {
   name: 'DialogExample',
   components: {
     A11yVueDialogRenderless,
-    Portal
+    Portal,
+    SimplePortal
   },
   extends: {A11yVueDialogRenderless},
-  props: ['open', 'role'],
+  props: ['open', 'role', 'useSimplePortal'],
   data: () => ({
+    disablePortal: false,
     innerTest: false
-  })
+  }),
 }
 </script>
 
