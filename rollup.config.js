@@ -63,7 +63,8 @@ export default [
 			file: pkg.browser,
 			banner,
 			format: 'umd',
-			sourcemap: true
+			sourcemap: true,
+			exports: 'named'
 		},
 		plugins: commonUmdPlugins
 	},
@@ -75,7 +76,8 @@ export default [
 			file: `dist/${pkg.name}.umd.min.js`,
 			banner,
 			format: 'umd',
-			sourcemap: false
+			sourcemap: false,
+			exports: 'named'
 		},
 		plugins: [
 			...commonUmdPlugins,
