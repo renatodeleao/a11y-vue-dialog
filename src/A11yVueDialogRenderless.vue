@@ -319,9 +319,8 @@ export default {
     this.id = `a11y-vue-dialog-${this._uid}`
   },
 
-  destroyed() {
-    this.toggleFocusTrap(false);
-    this.resetData()
+  beforeDestroy() {
+    this.handleClose()
   },
 
   /**
