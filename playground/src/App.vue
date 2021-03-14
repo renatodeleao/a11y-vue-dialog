@@ -3,9 +3,9 @@
     <main id="main">
       <button @click="isOpen = !isOpen">Default</button>
       <button style="visibility:hidden">Default</button>
-      <DialogExample 
-        :open="isOpen" 
-        @close="isOpen = false" 
+      <DialogExample
+        :open="isOpen"
+        @close="isOpen = false"
         key="lonely"
         #default="{ focusRef }">
          <div v-if="submit2" style="margin-bottom: 20px">
@@ -32,15 +32,15 @@
       </DialogExample>
 
       <button @click="exOpen = !exOpen">Nexted Example</button>
-      <DialogExample :open="exOpen" @close="exOpen = false" key="parent" 
+      <DialogExample :open="exOpen" @close="exOpen = false" key="parent"
         @show="preventBodyScroll(true, $event)"
         @hide="preventBodyScroll(false, $event)"
       >
         <button @click="exOpenTwo = !exOpenTwo">Open nested</button>
-        <DialogExample 
-          :open="exOpenTwo" 
-          @close="exOpenTwo = false" 
-          role="alertdialog" 
+        <DialogExample
+          :open="exOpenTwo"
+          @close="exOpenTwo = false"
+          role="alertdialog"
           key="nested"
           @show="preventBodyScroll(true, $event)"
           @hide="preventBodyScroll(false, $event)"
@@ -52,9 +52,9 @@
       <h1>{{ "make it scroll".repeat(100) }}</h1>
 
       <button @click="showDialog('preventScroll')">Nexted Example</button>
-      <DialogExample 
-        :open="examples.preventScroll" 
-        @close="closeDialog('preventScroll')" 
+      <DialogExample
+        :open="examples.preventScroll"
+        @close="closeDialog('preventScroll')"
         @show="preventBodyScroll(true, $event)"
         @hide="preventBodyScroll(false, $event)"
       >
@@ -63,7 +63,7 @@
 
       <h1>{{ "make it scroll".repeat(100) }}</h1>
     </main>
-    
+
 
     <!-- render at end of root -->
     <portal-target name="a11y-vue-dialogs" multiple />
@@ -74,7 +74,7 @@
 /** eslint-disable */
 import 'focus-visible'
 import { PortalTarget } from "portal-vue";
-import DialogExample from "./DialogExample";
+import DialogExample from "./components/DialogExample.vue";
 
 
 export default {
@@ -125,7 +125,7 @@ export default {
     preventBodyScroll(bool, hasSiblings) {
       if (hasSiblings) return // do nothing
 
-      bool 
+      bool
         ? document.body.style.overflow = 'hidden'
         : document.body.style.overflow = ''
     }

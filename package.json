@@ -59,7 +59,7 @@
     "docs:dev": "vuepress dev docs --debug --port 2000",
     "docs:build": "vuepress build docs",
     "docs:deploy": "./docs-deploy.sh $npm_package_repository_url",
-    "play": "vue serve -o ./playground/Playground.vue"
+    "play": "yarn --cwd playground serve"
   },
   "files": [
     "dist/*.js",

@@ -1,5 +1,5 @@
 <template>
-  <a11y-vue-dialog-renderless 
+  <a11y-vue-dialog-renderless
     v-bind="$props"
     v-on="$listeners"
     #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
@@ -9,9 +9,9 @@
         <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners" v-if="open">
           <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
             <header>
-              <h1 v-bind="titleRef.props">Title</h1> 
-              <button 
-                v-bind="closeRef.props" 
+              <h1 v-bind="titleRef.props">Title</h1>
+              <button
+                v-bind="closeRef.props"
                 v-on="closeRef.listeners"
               >x
               </button>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { A11yVueDialogRenderless } from '../src/index'
+import { A11yVueDialogRenderless } from '../../../src/index'
 import { Portal } from "portal-vue";
 
 export default {
