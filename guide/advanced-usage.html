@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced usage | A11y Vue Dialog</title>
+    <meta name="description" content="Just playing around">
+    <link rel="icon" href="/a11y-vue-dialog/logo.png">
+    
+    <link rel="preload" href="/a11y-vue-dialog/assets/css/0.styles.c99eab8a.css" as="style"><link rel="preload" href="/a11y-vue-dialog/assets/js/app.b62f5f79.js" as="script"><link rel="preload" href="/a11y-vue-dialog/assets/js/4.2e8d1805.js" as="script"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/10.fb6a18eb.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/11.26d53346.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/12.7f5b36ad.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/13.2faf2e79.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/14.a70584dd.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/2.8e1d3e0f.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/3.ee86b02c.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/5.62da8e9b.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/6.768c7ef4.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/7.be675906.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/8.8fa5f8c8.js"><link rel="prefetch" href="/a11y-vue-dialog/assets/js/9.a134c702.js">
+    <link rel="stylesheet" href="/a11y-vue-dialog/assets/css/0.styles.c99eab8a.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/a11y-vue-dialog/" class="home-link router-link-active"><!----> <span class="site-name">A11y Vue Dialog</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/a11y-vue-dialog/" class="nav-link">Home</a></div><div class="nav-item"><a href="/a11y-vue-dialog/guide/" class="nav-link router-link-active">Guide</a></div> <a href="https://github.com/renatodeleao/a11y-vue-dialog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/a11y-vue-dialog/" class="nav-link">Home</a></div><div class="nav-item"><a href="/a11y-vue-dialog/guide/" class="nav-link router-link-active">Guide</a></div> <a href="https://github.com/renatodeleao/a11y-vue-dialog" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><a href="/a11y-vue-dialog/guide/" class="sidebar-link">Introduction</a></li><li><a href="/a11y-vue-dialog/guide/installation-and-usage.html" class="sidebar-link">Getting Started</a></li><li><a href="/a11y-vue-dialog/guide/advanced-usage.html" class="active sidebar-link">Advanced Usage</a></li><li><a href="/a11y-vue-dialog/guide/renderless-usage.html" class="sidebar-link">Renderless Usage (new)</a></li><li><a href="/a11y-vue-dialog/guide/props.html" class="sidebar-link">Props</a></li><li><a href="/a11y-vue-dialog/guide/slots.html" class="sidebar-link">Slots</a></li><li><a href="/a11y-vue-dialog/guide/events.html" class="sidebar-link">Events</a></li><li><a href="/a11y-vue-dialog/guide/portal-vue.html" class="sidebar-link">Why portal-vue?</a></li><li><a href="/a11y-vue-dialog/guide/prevent-background-scrolling.html" class="sidebar-link">Prevent background scrolling</a></li><li><a href="/a11y-vue-dialog/guide/thanks.html" class="sidebar-link">Thanks</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="advanced-usage"><a href="#advanced-usage" class="header-anchor">#</a> Advanced usage</h1> <h4 id="custom-global-installation"><a href="#custom-global-installation" class="header-anchor">#</a> Custom global installation</h4> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// GLOBAL</span>
+<span class="token keyword">import</span> Portal <span class="token keyword">from</span> <span class="token string">&quot;portal-vue&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> A11yVueDialog <span class="token keyword">from</span> <span class="token string">&quot;a11y-vue-dialog&quot;</span><span class="token punctuation">;</span>
+
+Vue<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Portal<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  portalName<span class="token operator">:</span> <span class="token string">&quot;black-hole&quot;</span><span class="token punctuation">,</span> <span class="token comment">//[1]</span>
+  portalTargetName<span class="token operator">:</span> <span class="token string">&quot;black-holes-meeting&quot;</span> <span class="token comment">//[2]</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Vue<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>A11yVueDialog<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  componentName<span class="token operator">:</span> <span class="token string">&quot;AppNameDialog&quot;</span><span class="token punctuation">,</span> <span class="token comment">// [3] custom registered namee</span>
+  <span class="token comment">// override default prop values on global registration</span>
+  props<span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// ⚠️needs to match portal ⚠️</span>
+    portalName<span class="token operator">:</span> <span class="token string">&quot;black-hole&quot;</span><span class="token punctuation">,</span> <span class="token comment">//[1]</span>
+    portalTargetName<span class="token operator">:</span> <span class="token string">&quot;my-dialogs-contaner&quot;</span> <span class="token comment">//[4]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><div class="language-html extra-class"><pre class="language-html"><code><span class="token comment">&lt;!-- [3] --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>app-name-dialog</span> <span class="token attr-name">:open</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>true<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>This slot content will be rendered wherever the <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>black-holes-meeting</span><span class="token punctuation">&gt;</span></span> with name 'my-dialogs-container'
+    is  located.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>app-name-dialog</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><div class="language-html extra-class"><pre class="language-html"><code><span class="token comment">&lt;!--  [2, 4] --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>black-holes-meeting</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>my-dialogs-contaner<span class="token punctuation">&quot;</span></span> <span class="token attr-name">multiple</span> <span class="token punctuation">/&gt;</span></span>
+</code></pre></div><h4 id="custom-local-installation"><a href="#custom-local-installation" class="header-anchor">#</a> Custom local installation</h4> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+<span class="token comment">// assuming portal global default installation</span>
+<span class="token comment">// note the named export!</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> A11yVueDialog <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;a11y-vue-dialog&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">&quot;your-component&quot;</span><span class="token punctuation">,</span>
+  components<span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string">&quot;app-dialog&quot;</span><span class="token operator">:</span> A11yVueDialog
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+    open<span class="token operator">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>app-dialog</span> <span class="token attr-name">:open</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>open<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>This slot content will be rendered wherever the <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>portal-target</span><span class="token punctuation">&gt;</span></span> with name 'a11y-vue-dialogs'
+    is  located.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>app-dialog</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+
+</code></pre></div></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/a11y-vue-dialog/guide/installation-and-usage.html" class="prev">
+          Getting Started
+        </a></span> <span class="next"><a href="/a11y-vue-dialog/guide/renderless-usage.html">
+          Renderless Usage (new)
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/a11y-vue-dialog/assets/js/app.b62f5f79.js" defer></script><script src="/a11y-vue-dialog/assets/js/4.2e8d1805.js" defer></script>
+  </body>
+</html>
