@@ -6,7 +6,7 @@ const noop = () => {};
 const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus], textarea[autofocus]'
 
 /**
- * @see spyMouseDown|spyMouseUp - [1] 
+ * @see spyMouseDown|spyMouseUp - [1]
  */
 const getInitialState = () => ({
   id: null,
@@ -51,7 +51,7 @@ export default {
     },
     /**
      * @desc focus-trap package configuration object
-     * @see {@link https://github.com/focus-trap/focus-trap#usage} 
+     * @see {@link https://github.com/focus-trap/focus-trap#usage}
      */
     focusTrapCreateOptions: {
       type: Object,
@@ -76,11 +76,11 @@ export default {
      * "open" prop watcher side effects. Orchestrates everything DOM related
      * with the open state of the dialog. nextTick because dom is conditionally
      * rendered with v-if on root node.
-     * 
-     * @todo [1] - kind of embarassing but i need to investigate the need of 
-     * double nextTick, otherwise it will fail to get DOM refs from data-attrs. 
+     *
+     * @todo [1] - kind of embarassing but i need to investigate the need of
+     * double nextTick, otherwise it will fail to get DOM refs from data-attrs.
      * I get that we need one, But two? Maybe due portal mount as well? Investigate.
-     * 
+     *
      * If found, please write a test to it,
      */
     handleOpen() {
@@ -91,7 +91,6 @@ export default {
           if (!hasRefs) return;
 
           this.toggleFocusTrap(true);
-  
           this.lookForSiblings();
           this.toggleVisibilityEvents(true);
           this.toggleContentAriaAttrs(true);
@@ -113,12 +112,12 @@ export default {
     /**
      * Handle keyboard events on dialoRef element an manage which
      * method to call accordingly
-     * 
-     * @param {Event} e - Javascript keyboard event 
+     *
+     * @param {Event} e - Javascript keyboard event
      */
     handleKeyboard(e) {
       e.stopPropagation();
-      
+
       const { key, target } = e;
 
       if (key === 'Escape') {
@@ -148,13 +147,13 @@ export default {
     toggleVisibilityEvents(isOpen) {
       const hasSiblings = this.siblingsCount > 1
 
-      return isOpen 
+      return isOpen
         ? this.$emit('show', hasSiblings)
         : this.$emit('hide', hasSiblings)
     },
-    
+
     /**
-     * We can't use vue refs bindings with scopedSlots so we look for the attached 
+     * We can't use vue refs bindings with scopedSlots so we look for the attached
      * ref data-attributes on elements instead.
      * @returns {Boolean} performs checks for other ref dependend methods
      */
@@ -173,7 +172,7 @@ export default {
 
     /**
      * Cleans component internal state (data object).
-     * @todo implement a cache mechanism in case component wasn't destroyed. 
+     * @todo implement a cache mechanism in case component wasn't destroyed.
      * #perf
      */
     resetData() {
@@ -185,12 +184,12 @@ export default {
     /**
      * @see [FT1] - provided initial focus not found, it won't get the first focusable children
      *   {@link https://github.com/focus-trap/focus-trap/issues/113}
-     * @see [FT2] - if click outside an focusable element, but inside dialog body, (do not focus 
+     * @see [FT2] - if click outside an focusable element, but inside dialog body, (do not focus
      *   first focus element (close button), it's weird. But keep focus within dialog. It's overrideable
      *   via focusTrapCreateOptions
      * @see [FT3]
      *   Some input components wrappers might inheriting attributes, meaning
-     *   some <div autofocus> — this is an invalid focusable element — but we 
+     *   some <div autofocus> — this is an invalid focusable element — but we
      *   were getting it anyways, and focus-trap doesn't validate (and i agree)
      *   element so we changed our query to only select valid ones.
      *   @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes}
@@ -231,7 +230,7 @@ export default {
       return Array.from(elem.parentNode.children)
         .filter(sibling => sibling !== elem);
     },
-    
+
     toggleContentAriaAttrs(isOpen){
       // if theres already one open dialog, we don't need to toggle everything again.
       if(this.siblingsCount > 1) return;
@@ -260,8 +259,8 @@ export default {
 
     /**
     * Internals.
-    * 
-    * mostly created for testing, because i didn't figure out a 
+    *
+    * mostly created for testing, because i didn't figure out a
     * away of mock funtions that are defined, inline into the scopedSlots
     * returned Object
     */
@@ -270,24 +269,24 @@ export default {
     },
 
     /**
-     * Prevents mouseup that started inside (dialogRef mousedown) to bubble 
-     * and trigger backdrop click, consequentially closing the dialog. 
-     * 
-     * ⚠️ Note: for cases when backdropRef wraps the dialog content, 
-     *    so it's also our root, that's why it's affected by children 
+     * Prevents mouseup that started inside (dialogRef mousedown) to bubble
+     * and trigger backdrop click, consequentially closing the dialog.
+     *
+     * ⚠️ Note: for cases when backdropRef wraps the dialog content,
+     *    so it's also our root, that's why it's affected by children
      *    events bubbling
-     * 
+     *
      * This prevents a default browser behaviour, when the mouse click is released,
      * both the mouseup and click events are fired. Since consumers might define
      * backdrop as root (picture a pseudo element as the overlay for example)
-     * 
+     *
      * Setting as separate element inside the root doens't require this, but
      * we must remain unopinionated in relation to markup.
      *
      * @see https://stackoverflow.com/a/20290312/2801012
      * @see https://codesandbox.io/s/click-drag-selection-outside-still-triggers-click-after-mouseup-t0742
      *
-     * @see captureMouseUp 
+     * @see captureMouseUp
      * @see spyMouseDown
      * @see spyMouseUp
      */
@@ -325,24 +324,24 @@ export default {
 
   /**
    * @slot binding to be applied to the defined elements. Each ref suffixed
-   * binding is an object that contains a "props" and "listeners" keys to be 
+   * binding is an object that contains a "props" and "listeners" keys to be
    * attached to elements via v-bind and v-on respectively
-   * 
-   * @binding {Boolean} open - prop forwarding for portal v-if   
-   * @binding {Function} close - method forwarding for closing the dialog   
+   *
+   * @binding {Boolean} open - prop forwarding for portal v-if
+   * @binding {Function} close - method forwarding for closing the dialog
    * @binding {Object} backdropRef - for the backdrop element
    * @binding {Object} dialogRef - for the main dialog element
    * @binding {Object} closeRef - for attching close buttons/actions
-   * @binding {Object} titleRef - For attaching dialog title, for accessiblity 
-   * 
+   * @binding {Object} titleRef - For attaching dialog title, for accessiblity
+   *
    * @todo [1] - If some one selects text from the dialog, document.activeElement is
    *  set to the backdrop, even with tabindex="-1", so we need to bind keyboard events
    *  there as well so that dialog keeps closing on escape click. Not sure if
    *  the best way, but shipable for now
-   * 
-   * @see [2] - It is strongly recommended that the tab sequence of all 
-   *  dialogs include a visible element with role button that closes the 
-   *  dialog, such as a close icon or cancel button. 
+   *
+   * @see [2] - It is strongly recommended that the tab sequence of all
+   *  dialogs include a visible element with role button that closes the
+   *  dialog, such as a close icon or cancel button.
    *  {@link https://www.w3.org/TR/wai-aria-practices/#dialog_modal}
    */
   render() {
