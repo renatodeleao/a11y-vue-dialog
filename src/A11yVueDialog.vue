@@ -227,7 +227,7 @@ export default {
     },
 
     //----------------
-    // All credits to Hugo Giraudel for this
+    // All credits to Kitty Giraudel for this
     // https://github.com/edenspiekermann/a11y-dialog/blob/master/a11y-dialog.js
     //
     // adapted to this instance
