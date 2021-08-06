@@ -72,6 +72,26 @@
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
       </DialogExample>
 
+
+      <button @click="showDialog('useSimplePortalNested')">Use simple portal with nest</button>
+      <DialogExample
+        :open="examples.useSimplePortalNested"
+        :use-simple-portal="true"
+        @close="closeDialog('useSimplePortalNested')"
+      >
+        qweqexw
+        <button @click="showDialog('useSimplePortalNestedChild')">Open nested</button>
+        <DialogExample
+          :open="examples.useSimplePortalNestedChild"
+          @close="closeDialog('useSimplePortalNestedChild')"
+          role="alertdialog"
+          key="nested"
+          :use-simple-portal="true"
+        >
+          <h3>This wont' on backdrop click since it's an alertdialog, and backdrop is outside dialog</h3>
+        </DialogExample>
+      </DialogExample>
+
       <h1>{{ "make it scroll".repeat(100) }}</h1>
     </main>
 
@@ -108,7 +128,9 @@ export default {
     submitting2: false,
     examples: {
       preventScroll: false,
-      useSimplePortal: false
+      useSimplePortal: false,
+      useSimplePortalNested: false,
+      useSimplePortalNestedChild: false
     }
   }),
   methods: {
