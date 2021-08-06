@@ -184,7 +184,7 @@ Thanks to all this packages for inspiration and guidance.
 1. [portal-vue](https://github.com/LinusBorg/portal-vue/) from @LinusBorg wich makes escape overflow traps like breeze
 
 #### Acknowledgements
-- a11y-dialog (vanilla) from @HugoGiraudel to lead the path that ended here
+- a11y-dialog (vanilla) from @KittyGiraudel to lead the path that ended here
 - vue-a11y-dialog (wrapper around ^) from @morkro for the motivation to build a pure vue alternative to it.
 - vue-js-dialog a fully fledge massive dialog
 
