@@ -34,7 +34,7 @@
     "cssnano": "^4.1.8",
     "focus-visible": "^5.1.0",
     "jest": "^25.3.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "postcss": "^7.0.14",
     "postcss-banner": "^3.0.1",
     "rollup": "^1.0.0",
