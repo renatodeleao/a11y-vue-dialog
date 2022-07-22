@@ -1,8 +1,24 @@
 <template>
   <div id="playground">
     <main id="main">
+      <button @click="basicDialog = true">Open basic Dialog</button>
       <button @click="isOpen = !isOpen">Default</button>
       <button style="visibility:hidden">Default</button>
+
+      <BasicDialog
+        :open="basicDialog"
+        @close="basicDialog = false"
+        @confirm="basicDialog = false"
+      >
+        <template v-slot:title>
+          Your markup,
+          <strong>your rules</strong>
+        </template>
+        <template v-slot:default>
+          Are you sure you want to be overriding CSS or pass a thousand props again?
+        </template>
+      </BasicDialog>
+
       <DialogExample
         :open="isOpen"
         @close="isOpen = false"
@@ -107,16 +123,19 @@
 import 'focus-visible'
 import { PortalTarget } from "portal-vue";
 import DialogExample from "./components/DialogExample.vue";
+import BasicDialog from "./components/BasicDialog.vue";
 
 
 export default {
   name: "Playground",
   components: {
+    BasicDialog,
     DialogExample,
     PortalTarget,
     // A11yDialog
   },
   data: () => ({
+    basicDialog: false,
     last: false,
     exOpen: false,
     exOpenTwo: false,
