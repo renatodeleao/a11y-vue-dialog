@@ -43,7 +43,7 @@
     "sass-loader": "^8.0.2",
     "vue-jest": "^3.0.5",
     "vue-template-compiler": "2.6.11",
-    "vuepress": "0.14.11"
+    "vuepress": "^1.9.7"
   },
   "scripts": {
     "build": "rm -rf dist/** && rollup -c",
