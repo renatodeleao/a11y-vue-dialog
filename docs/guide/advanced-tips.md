@@ -8,6 +8,59 @@ This component should work with any `portal|teleport` solution. We don't ship on
 
 if you already have any of the packages mentioned above or are using a custom solution, see the "usage with portal" chapter for instructions.
 
+### Usage with `vue-simple-portal`
+
+This demo uses [vue-simple-portal](https://github.com/LinusBorg/vue-simple-portal#transitions), but it would be more or less the same with any `portal` solution
+
+```vue
+<template>
+  <portal v-if="open">
+    <a11y-dialog>
+      <!-- your implementation like above -->
+    </a11y-dialog>
+  </portal>
+</template>
+
+<script>
+import { Portal } from '@linusborg/vue-simple-portal'
+
+export default {
+  components: { Portal, A11yDialog }
+}
+</script>
+```
+
+### Combine with `<transition>`
+
+
+>When you use a `<transition>` as the root element of the portal and then remove the portal (i.e. with v-if) or set its disabled prop to true, no leave transition will happen.
+>While this is to expected, as the same thing would happen if you removed a div that contains a `<transition>`, it often trips people up, which is why it's mentioned here.
+> — [vue-simple-portal](https://github.com/LinusBorg/vue-simple-portal#transitions)
+
+_if you really need to apply the `v-if` to portal, check the example in the link above_
+
+But based on the info above, this also works fine: 
+
+```vue
+<template>
+  <portal>
+    <!-- 
+      [1] note the v-if is applied to transition not portal.
+          could also be applied to the component itself
+    -->
+    <transition name="fade" appear v-if="open">
+      <a11y-dialog 
+        :open="open"
+        v-bind="$attrs"
+        v-on="$listeners"
+        #default="slotProps"
+      >
+        <!-- your implementation -->
+      </a11y-dialog>
+    </transition>
+  </portal>
+</template>
+```
 
 ## Prevent background scrolling
 Before `v0.6.x` the plugin exposed a `preventBackgroundScrolling` boolean prop that basically toggled `overflow:hidden` on body when open/close. It sounds like a reasonable default but: 
