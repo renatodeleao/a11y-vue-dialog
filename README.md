@@ -20,7 +20,6 @@ yarn add a11y-dialog
 ```
 
 ## Usage
-### Locally (recommended)
 
 A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your markup and styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
 
@@ -74,17 +73,6 @@ export default {
 
 Voilá, checkout a [working example on CodeSandbox](https://codesandbox.io/s/renderless-a11y-vue-dialog-q5lqk?file=/src/components/DialogConfirm.vue).
 
-### Globally
-It's not very useful, but if you prefer.
-
-```js
-// locally the component
-import Plugin from "a11y-vue-dialog";
-
-// if you want to register globally
-Vue.use(Plugin);
-// exposes a component name <a11y-dialog> by default, but configurable
-```
 ### Teleporting outside of document flow
 This component should work with any `portal|teleport` solution. We don't ship one as a dependency because it's not a requirement from a wai-aria guidelines standpoint. That being said, I could not recommend enough the usage of one, to escape common rendering gotchas with dialogs — the overflow trap.
 

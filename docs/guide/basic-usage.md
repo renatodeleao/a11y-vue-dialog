@@ -8,7 +8,6 @@ yarn add a11y-vue-dialog
 ```
 
 ## Usage
-### Locally (recommended)
 
 A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your markup and styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
 
@@ -60,14 +59,3 @@ export default {
 ```
 
 Voilá, checkout a [working example on CodeSandbox](https://codesandbox.io/s/renderless-a11y-vue-dialog-q5lqk?file=/src/components/DialogConfirm.vue).
-
-### Globally
-It's not very useful, because you don't want to render the raw version without composing it with your markup and styles in order to show it to users. But if you prefer:
-
-```js
-import Plugin from "a11y-vue-dialog";
-
-// if you want to register globally
-Vue.use(Plugin);
-// exposes a component name <a11y-dialog> by default, but configurable
-```
