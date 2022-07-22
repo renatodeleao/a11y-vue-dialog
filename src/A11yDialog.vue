@@ -201,7 +201,7 @@ export default {
           {
             escapeDeactivates: false,
             allowOutsideClick: true,
-            initialFocus: this.focusRef || this.dialogEl.querySelector(AUTOFOCUS_QUERY), // [FT1] [FT3]
+            initialFocus: this.focusRef || this.dialogEl.querySelector(AUTOFOCUS_QUERY) || undefined, // [FT1] [FT3]
             fallbackFocus: this.dialogEl, // [FT2]
             ...this.focusTrapCreateOptions
           }
