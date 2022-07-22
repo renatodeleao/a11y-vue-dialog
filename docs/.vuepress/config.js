@@ -23,14 +23,12 @@ module.exports = {
     sidebarDepth: 2,
     sidebar: [
       '/guide/',
-      ['/guide/installation-and-usage', "Getting Started"],
-      ['/guide/advanced-usage', "Advanced Usage"],
-      ['/guide/renderless-usage', "Renderless Usage (new)"],
+      ['/guide/basic-usage', "Getting Started"],
+      ['/guide/advanced-usage', "Full Example"],
       ['/guide/props', "Props"],
-      ['/guide/slots', "Slots"],
+      ['/guide/slot-scope', "Slot scope"],
       ['/guide/events', "Events"],
-      ['/guide/portal-vue', "Why portal-vue?"],
-      ['/guide/prevent-background-scrolling', "Prevent background scrolling"],
+      ['/guide/advanced-tips', "Advanced tips"],
       ['/guide/thanks', "Thanks"],
     ]
   }
