@@ -1,7 +1,7 @@
-import A11yVueDialogRenderless from "./A11yVueDialogRenderless.vue";
+import A11yDialog from "./A11yDialog.vue";
 
 const DEFAULTS = {
-  componentName: "a11y-vue-dialog",
+  componentName: "a11y-dialog",
 }
 
 var Plugin = {
@@ -19,16 +19,16 @@ var Plugin = {
     // is there a better way of doing this
     // (extend default prop value on component registration)*
     if( options.props) {
-      Object.keys(A11yVueDialogRenderless.props).map(propName => {
+      Object.keys(A11yDialog.props).map(propName => {
         if(options.props[propName]) {
-          A11yVueDialogRenderless.props[propName]['default'] = options.props[propName];
+          A11yDialog.props[propName]['default'] = options.props[propName];
         }
       });
     }
 
-    Vue.component(this.componentName, A11yVueDialogRenderless)
+    Vue.component(this.componentName, A11yDialog)
   }
 }
 
-export { A11yVueDialogRenderless };
+export { A11yDialog };
 export default Plugin;

@@ -1,12 +1,12 @@
 # Events <Badge text="in-progress" type="warn" />
 
-As any controlled component, `a11y-vue-dialog` uses the props down events up flow to communicate.
+As any controlled component, `a11y-dialog` uses the props down events up flow to communicate.
 
 
 ### `@close`
 After dialog becomes visible
 ```html
-<a11y-vue-dialog :open="dialogOpen" @close="handleClose">
+<a11y-dialog :open="dialogOpen" @close="handleClose">
  this goes to the default slots
 </a11-vue-dialog>
 ```
@@ -30,7 +30,7 @@ export default {
 ### `@show`
 When dialog becomes visible
 ```html
-<a11y-vue-dialog :open="dialogOpen" @show="onShow">
+<a11y-dialog :open="dialogOpen" @show="onShow">
 this goes to the default slots
 </a11-vue-dialog>
 ```
@@ -48,7 +48,7 @@ export default {
 ### `@hide`
 When dialog becomes visible
 ```html
-<a11y-vue-dialog :open="dialogOpen" @hide="onHide">
+<a11y-dialog :open="dialogOpen" @hide="onHide">
 this goes to the default slots
 </a11-vue-dialog>
 ```

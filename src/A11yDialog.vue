@@ -22,7 +22,7 @@ const getInitialState = () => ({
 export const VALID_ROLES = ["dialog", "alertdialog"];
 
 export default {
-  name: "a11y-vue-dialog-renderless",
+  name: "a11y-dialog",
   props: {
     /**
      * @desc control's dialog visibility
@@ -158,7 +158,7 @@ export default {
      * @returns {Boolean} performs checks for other ref dependend methods
      */
     getDOMRefs() {
-      this.dialogRoot = document.querySelector(`[data-id="a11y-vue-dialog-${this._uid}"]`);
+      this.dialogRoot = document.querySelector(`[data-id="a11y-dialog-${this._uid}"]`);
 
       if (this.dialogRoot) {
         this.dialogEl = this.dialogRoot.querySelector('[data-ref="dialog"]');
@@ -315,7 +315,7 @@ export default {
    * called. Needs investigation
    */
   created() {
-    this.id = `a11y-vue-dialog-${this._uid}`
+    this.id = `a11y-dialog-${this._uid}`
   },
 
   beforeDestroy() {

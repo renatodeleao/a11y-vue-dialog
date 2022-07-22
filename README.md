@@ -16,7 +16,7 @@ npm i a11y-vue-dialog
 
 # or
 
-yarn add a11y-vue-dialog 
+yarn add a11y-dialog 
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ A renderless/headless component provides all the functionality required to build
 ```vue
 <!-- AppBaseDialog.vue -->
 <template>
-  <a11y-vue-dialog-renderless 
+  <a11y-dialog 
     v-bind="$attrs" 
     v-on="$listeners"
     v-slot:default="{ titleRef, closeRef }"
@@ -37,15 +37,15 @@ A renderless/headless component provides all the functionality required to build
     <button v-bind="closeRef.props" v-on="closeRef.listeners">
     ...
     <slot />
-  </a11y-vue-dialog>
+  </a11y-dialog>
 </template>
 
 <script>
-import { A11yVueDialogRenderless } from 'a11y-vue-dialog'
+import { A11yDialog } from 'a11y-dialog'
 
 export default {
   name: 'AppBaseDialog',
-  components: { A11yVueDialogRenderless },
+  components: { A11yDialog },
   props: {
     title: {
       type: String,
@@ -83,7 +83,7 @@ import Plugin from "a11y-vue-dialog";
 
 // if you want to register globally
 Vue.use(Plugin);
-// exposes a component name <a11y-vue-dialog> by default, but configurable
+// exposes a component name <a11y-dialog> by default, but configurable
 ```
 ### Teleporting outside of document flow
 This component should work with any `portal|teleport` solution. We don't ship one as a dependency because it's not a requirement from a wai-aria guidelines standpoint. That being said, I could not recommend enough the usage of one, to escape common rendering gotchas with dialogs — the overflow trap.
@@ -122,7 +122,7 @@ The default `scopedSlot` props help you bind the accessibility attributes and ev
 ```vue
 <!-- compose into you own markup, MyDialog.vue -->
 <template>
-  <a11y-vue-dialog-renderless 
+  <a11y-dialog 
     v-bind="$attrs"
     v-bind="$listeners"
     #default="{ closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
@@ -158,15 +158,15 @@ The default `scopedSlot` props help you bind the accessibility attributes and ev
         </footer>
       </div>
     </div>
-  </a11y-vue-dialog-renderless>
+  </a11y-dialog>
 </template>
 
 <script>
-import { A11yVueDialogRenderless } from "a11y-vue-dialog";
+import { A11yDialog } from "a11y-vue-dialog";
 
 export default {
   name: 'AppDialog',
-  components: { A11yVueDialogRenderless },
+  components: { A11yDialog },
 }
 </script>
 ```
@@ -197,9 +197,9 @@ This demo uses [vue-simple-portal](https://github.com/LinusBorg/vue-simple-porta
 ```vue
 <template>
   <portal v-if="open">
-    <a11y-vue-dialog-renderless>
+    <a11y-dialog>
       <!-- your implementation like above -->
-    </a11y-vue-dialog-renderless>
+    </a11y-dialog>
   </portal>
 </template>
 
@@ -207,7 +207,7 @@ This demo uses [vue-simple-portal](https://github.com/LinusBorg/vue-simple-porta
 import { Portal } from '@linusborg/vue-simple-portal'
 
 export default {
-  components: { Portal, A11yVueDialogRenderless }
+  components: { Portal, A11yDialog }
 }
 </script>
 ```
@@ -228,13 +228,13 @@ But based on the info above, this also works fine:
           could also be applied to the component itself
     -->
     <transition name="fade" appear v-if="open">
-      <a11y-vue-dialog-renderless 
+      <a11y-dialog 
         v-bind="$attrs"
         v-bind="$listeners"
         #default="slotProps"
       >
         <!-- your implementation -->
-      </a11y-vue-dialog-renderless>
+      </a11y-dialog>
     </transition>
   </portal>
 </template>
