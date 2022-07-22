@@ -58,4 +58,4 @@ export default {
 </template>
 ```
 
-Voilá, checkout a [working example on CodeSandbox](https://codesandbox.io/s/renderless-a11y-vue-dialog-q5lqk?file=/src/components/DialogConfirm.vue).
+Voilá, checkout a [working example on CodeSandbox](https://codesandbox.io/s/renderless-a11y-vue-dialog-demo-0-8-0-beta-1-3igsm9).
