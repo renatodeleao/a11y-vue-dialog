@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import A11yVueDialogRenderless from "../A11yVueDialogRenderless.vue";
+import A11yDialog from "../A11yDialog.vue";
 
 /**
  * Gotachas:
@@ -8,10 +8,10 @@ import A11yVueDialogRenderless from "../A11yVueDialogRenderless.vue";
  *  are visible, till we refactor this test suite
  *    @see https://github.com/jsdom/jsdom/issues/1048
  */
-describe("A11yVueDialogRenderless", () => {
+describe("A11yDialog", () => {
   // [1]
   const mockIsVisible = jest.fn().mockReturnValue(true)
-  
+
   const methodsMock = {
     close: jest.fn(),
     handleKeyboard: jest.fn(),
@@ -25,10 +25,10 @@ describe("A11yVueDialogRenderless", () => {
    * 🤦‍♂️
    * @todo // [1]
    */
-  const MockedA11yVueDialogRenderless = {
-    ...A11yVueDialogRenderless,
+  const MockedA11yDialog = {
+    ...A11yDialog,
     methods: {
-      ...A11yVueDialogRenderless.methods,
+      ...A11yDialog.methods,
       _isVisible: mockIsVisible
     }
   }
@@ -38,7 +38,7 @@ describe("A11yVueDialogRenderless", () => {
    */
   const WrapperComp = {
     components: {
-      MockedA11yVueDialogRenderless
+      MockedA11yDialog
     },
     props: {
       showFocusRef: {
@@ -55,12 +55,12 @@ describe("A11yVueDialogRenderless", () => {
       isOpen: false,
     }),
     template: `
-      <MockedA11yVueDialogRenderless
+      <MockedA11yDialog
         :open="isOpen"
         @close="$emit('close')"
         #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
       >
-        <portal to="a11y-vue-dialogs" v-if="open">
+        <portal to="a11y-dialogs" v-if="open">
           <div
             class="mock-dialog"
             v-bind="backdropRef.props"
@@ -112,7 +112,7 @@ describe("A11yVueDialogRenderless", () => {
             </div>
           </div>
         </portal>
-      </MockedA11yVueDialogRenderless>
+      </MockedA11yDialog>
     `
   };
 
@@ -124,7 +124,7 @@ describe("A11yVueDialogRenderless", () => {
         ...options.stubs
       },
       ...options
-    }).find(A11yVueDialogRenderless)
+    }).find(A11yDialog)
   }
 
   const wrapper = mountWithOptions()
@@ -138,7 +138,7 @@ describe("A11yVueDialogRenderless", () => {
   // beforeEach(() => {
   //   spyError.mockReset()
   //   spyWarn.mockReset()
-  // }) 
+  // })
 
   const event = { stopPropagation: jest.fn() }
 
@@ -152,7 +152,7 @@ describe("A11yVueDialogRenderless", () => {
   // sanity check
   it("is a Vue instance", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
-    expect(wrapper.is(A11yVueDialogRenderless)).toBeTruthy();
+    expect(wrapper.is(A11yDialog)).toBeTruthy();
   });
 
   describe('props', () => {
@@ -178,7 +178,7 @@ describe("A11yVueDialogRenderless", () => {
       it('should attach correct binding props to bound element', () => {
         expect(backdropRef.attributes('data-ref')).toBe('backdrop')
         expect(backdropRef.attributes('tabindex')).toBe('-1')
-        expect(backdropRef.attributes('data-id')).toContain(`a11y-vue-dialog-`)
+        expect(backdropRef.attributes('data-id')).toContain(`a11y-dialog-`)
       })
 
       it('should attach correct binding listeners to bound element', async () => {
@@ -197,14 +197,14 @@ describe("A11yVueDialogRenderless", () => {
         const dialogRef = _wrapper.find('.mock-dialog__inner')
         expect(dialogRef.attributes('data-ref')).toBe('dialog')
         expect(dialogRef.attributes('role')).toBe('dialog')
-        expect(dialogRef.attributes('aria-labelledby')).toContain(`a11y-vue-dialog-`)
+        expect(dialogRef.attributes('aria-labelledby')).toContain(`a11y-dialog-`)
       })
 
       /**
        * @todo [1] - I must be doing something wrong, but using setMethods() will make
        * subsequent tests that depend on emit (not mocked methods) fail. I don't
        * know why since we're mounting a component per test. I have no f*ing clue
-       * 
+       *
        * also i can't just assert method calling not matter what i do. can't figure
        * out why right now and i've already lost too much time on this. It is working
        * just add a console.log('') to handleKeyboard and close() and jest will log
@@ -212,20 +212,20 @@ describe("A11yVueDialogRenderless", () => {
        */
       it('should attach correct binding listeners to bound element', async () => {
         const test = jest.fn(event)
-        const _wrapper = mountWithOptions({ 
+        const _wrapper = mountWithOptions({
           methods: {
             handleKeyboard: test
           },
           data: () => ({ isOpen: true }) })
-          
+
         await _wrapper.vm.$nextTick()
 
         const dialogRef = _wrapper.find('.mock-dialog__inner')
-        
+
         dialogRef.trigger('click', event)
         // dialogRef.trigger('keydown.esc', another)
         // dialogRef.trigger('keydown.tab', event)
-        
+
         await _wrapper.vm.$nextTick()
 
         expect(event.stopPropagation).toBeCalledTimes(1);
@@ -281,14 +281,14 @@ describe("A11yVueDialogRenderless", () => {
         const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
 
         await _wrapper.vm.$nextTick()
-        
+
         expect(_wrapper.emitted().show).toBeTruthy()
         expect(_wrapper.emitted().show[0][0]).toBe(false) // hasSiblings
-        
+
         _wrapper.setProps({ open: false })
-        
+
         await _wrapper.vm.$nextTick()
-        
+
         expect(_wrapper.emitted().hide).toBeTruthy()
         expect(_wrapper.emitted().hide[0][0]).toBe(false) // hasSiblings
       })
@@ -319,19 +319,19 @@ describe("A11yVueDialogRenderless", () => {
       * @todo for cases where backdrop is root and wraps dialogRef (content)
       * edge case when someone, for example, starts selecting text inside
       * dialogRef and drags selection to outside and relases mouse click (mouseup)
-      * 
+      *
       * 🆘 I have no clue how to write a test for this
       *
-      * @see A11yVueDialogRenderless#captureMouseUp 
+      * @see A11yDialog#captureMouseUp
       */
-      it('should stop backdropRef click event if mouseup on backdropRef is preceded from a mousedown with a different origin', async () => {      
-        const container = mountWithOptions({ 
+      it('should stop backdropRef click event if mouseup on backdropRef is preceded from a mousedown with a different origin', async () => {
+        const container = mountWithOptions({
           data: () => ({ isOpen: true })
         })
 
         const backdropRefIsRoot = container.find('[data-ref="backdrop"]')
         const dialogRef = container.find('[data-ref="dialog"]')
-        
+
         expect(container.vm.mouseDownOrigin).toBeNull();
         dialogRef.trigger('mousedown')
 
@@ -344,8 +344,8 @@ describe("A11yVueDialogRenderless", () => {
         // since mouse
         expect(container.emitted().close).toBeUndefined()
         // this is what's actually happen but can't mock
-        //expect(container.vm.captureMouseUp).toHaveBeenCalled()        
-        //expect(container.vm.mouseDownOrigin).toBeNull()        
+        //expect(container.vm.captureMouseUp).toHaveBeenCalled()
+        //expect(container.vm.mouseDownOrigin).toBeNull()
       })
     })
   })

@@ -18,15 +18,15 @@ By these reasons i decided to deprecate this default implementation (which are j
 
 ``` vue
 <template>
-  <a11y-vue-dialog 
+  <a11y-dialog 
     :open="dialogOpen" 
     @close="dialogOpen = false"
     @show="preventScroll(true, $event)"
     @hide="preventScroll(false, $event)"
   >
-    <p>This slot content will be rendered wherever the <portal-target> with name 'a11y-vue-dialogs'
+    <p>This slot content will be rendered wherever the <portal-target> with name 'a11y-dialogs'
       is  located.</p>
-  </a11y-vue-dialog>
+  </a11y-dialog>
 </template>
 ```
 ```js

@@ -15,7 +15,7 @@ A renderless/headless component provides all the functionality required to build
 ```vue
 <!-- AppBaseDialog.vue -->
 <template>
-  <a11y-vue-dialog-renderless 
+  <a11y-dialog 
     v-bind="$attrs" 
     v-on="$listeners"
     v-slot:default="{ titleRef, closeRef }"
@@ -25,15 +25,15 @@ A renderless/headless component provides all the functionality required to build
     <button v-bind="closeRef.props" v-on="closeRef.listeners">
     ...
     <slot />
-  </a11y-vue-dialog>
+  </a11y-dialog>
 </template>
 
 <script>
-import { A11yVueDialogRenderless } from 'a11y-vue-dialog'
+import { A11yDialog } from 'a11y-vue-dialog'
 
 export default {
   name: 'AppBaseDialog',
-  components: { A11yVueDialogRenderless },
+  components: { A11yDialog },
   props: {
     title: {
       type: String,
@@ -69,5 +69,5 @@ import Plugin from "a11y-vue-dialog";
 
 // if you want to register globally
 Vue.use(Plugin);
-// exposes a component name <a11y-vue-dialog> by default, but configurable
+// exposes a component name <a11y-dialog> by default, but configurable
 ```

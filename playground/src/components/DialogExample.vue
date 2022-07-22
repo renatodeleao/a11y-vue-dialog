@@ -4,7 +4,7 @@
     :to="!useSimplePortal && 'a11y-vue-dialogs'"
   >
     <transition name="fade" mode="out-in" appear v-if="open">
-      <a11y-vue-dialog-renderless
+      <a11y-dialog
         v-bind="$props"
         v-on="$listeners"
         #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
@@ -34,24 +34,24 @@
             </section>
           </div>
         </div>
-      </a11y-vue-dialog-renderless>
+      </a11y-dialog>
     </transition>
   </component>
 </template>
 
 <script>
-import { A11yVueDialogRenderless } from '../../../src/index'
+import { A11yDialog } from '../../../src/index'
 import { Portal } from "portal-vue";
 import { Portal as SimplePortal } from "@linusborg/vue-simple-portal";
 
 export default {
   name: 'DialogExample',
   components: {
-    A11yVueDialogRenderless,
+    A11yDialog,
     Portal,
     SimplePortal
   },
-  extends: {A11yVueDialogRenderless},
+  extends: {A11yDialog},
   props: ['open', 'role', 'useSimplePortal'],
   data: () => ({
     disablePortal: false,

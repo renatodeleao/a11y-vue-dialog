@@ -97,8 +97,8 @@
 
 
     <!-- render at end of root -->
-    <portal-target name="a11y-vue-dialogs" multiple />
-    <div id="a11y-vue-dialogs" />
+    <portal-target name="a11y-dialogs" multiple />
+    <div id="a11y-dialogs" />
   </div>
 </template>
 
@@ -114,7 +114,7 @@ export default {
   components: {
     DialogExample,
     PortalTarget,
-    // A11yVueDialogRenderless
+    // A11yDialog
   },
   data: () => ({
     last: false,
