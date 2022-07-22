@@ -5698,12 +5698,12 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-focus-trap@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.1.2.tgz#32b828f826b5600017ef3f8a9fdd610c83170f89"
-  integrity sha512-AcdhVlgM7oIfNgrK+/DSa2J9Lh6N8+ulWiT57TgcbF7xYXnwYfHolvjzjEbFGNrGvDV/rwohfwP1q13Ce8OBbQ==
+focus-trap@^6.9.4:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.9.4.tgz#436da1a1d935c48b97da63cd8f361c6f3aa16444"
+  integrity sha512-v2NTsZe2FF59Y+sDykKY+XjqZ0cPfhq/hikWVL88BqLivnNiEffAsac6rP6H45ff9wG9LL5ToiDqrLEP9GX9mw==
   dependencies:
-    tabbable "^5.1.1"
+    tabbable "^5.3.3"
 
 focus-visible@^5.1.0:
   version "5.1.0"
@@ -11057,10 +11057,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-tabbable@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.1.1.tgz#33d6950a615bc78c6eb6828f3953e66544817dc4"
-  integrity sha512-qjkrV7I29Lkg///jPQnq26+26q9wQOKTEcckrwPejTsxxl2zdK60x0XmiEELCEParLhgbVQRflyKkpr+K/SmCQ==
+tabbable@^5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.3.3.tgz#aac0ff88c73b22d6c3c5a50b1586310006b47fbf"
+  integrity sha512-QD9qKY3StfbZqWOPLp0++pOrAVb/HbUi5xCc8cUo4XjP19808oaMiDzn0leBY5mCespIBM0CIZePzZjgzR83kA==
 
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"

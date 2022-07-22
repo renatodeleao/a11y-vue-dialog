@@ -63,7 +63,7 @@
     "src"
   ],
   "dependencies": {
-    "focus-trap": "^6.1.2"
+    "focus-trap": "^6.9.4"
   },
   "resolutions": {
     "js-yaml": "^3.11.1"
