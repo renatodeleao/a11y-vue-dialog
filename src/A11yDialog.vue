@@ -1,5 +1,6 @@
 <script>
 import { createFocusTrap } from 'focus-trap'
+import { UniversalLifecyleNamesMap } from './utils.js'
 
 const noop = () => {};
 // @see [FT3]
@@ -318,7 +319,7 @@ export default {
     this.id = `a11y-dialog-${this._uid}`
   },
 
-  beforeDestroy() {
+  [UniversalLifecyleNamesMap.beforeUnmount]() {
     this.handleClose()
   },
 
