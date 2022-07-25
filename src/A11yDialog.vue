@@ -28,6 +28,7 @@ export const VALID_ROLES = ["dialog", "alertdialog"];
 
 export default {
   name: "a11y-dialog",
+  emits: ['show', 'hide', 'close'],
   props: {
     /**
      * @desc control's dialog visibility
