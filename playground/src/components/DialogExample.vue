@@ -1,7 +1,7 @@
 <template>
   <component
     :is="useSimplePortal ? 'simple-portal' : 'portal'"
-    :to="!useSimplePortal && 'a11y-vue-dialogs'"
+    :to="!useSimplePortal && 'a11y-dialogs'"
   >
     <transition name="fade" mode="out-in" appear v-if="open">
       <a11y-dialog
