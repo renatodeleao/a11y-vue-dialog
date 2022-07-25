@@ -1,5 +1,6 @@
 ## Why another modal/dialog plugin
 
+- ✅ Universal: works in `vue@2` and `vue@3` 🚧
 - ✅ Renderless/headless: no assumptions about styles or markup. You have full control.
 - ✅ Accessibility first — Focus trap<sup>[1]</sup> + keyboard navigation + aria-attributes
 - ✅ Fully controlled component
