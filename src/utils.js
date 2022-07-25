@@ -10,3 +10,5 @@ export const UniversalLifecyleNamesMap = {
   unmounted: isVue3 ? 'unmounted' : 'destroyed'
 }
 
+/** @type {function} */
+export const noop = () => {};

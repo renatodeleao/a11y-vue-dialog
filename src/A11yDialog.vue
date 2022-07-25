@@ -1,8 +1,7 @@
 <script>
 import { createFocusTrap } from 'focus-trap'
-import { UniversalLifecyleNamesMap } from './utils.js'
+import { noop, UniversalLifecyleNamesMap } from './utils.js'
 
-const noop = () => {};
 // @see [FT3]
 const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus], textarea[autofocus]'
 
