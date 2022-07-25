@@ -1,6 +1,11 @@
 <script>
 import { createFocusTrap } from 'focus-trap'
-import { noop, UniversalLifecyleNamesMap, uniqueId } from './utils.js'
+import {
+  noop,
+  uniqueId,
+  UniversalLifecyleNamesMap,
+  universalSlotAccessProp
+} from './utils.js'
 
 // @see [FT3]
 const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus], textarea[autofocus]'
@@ -345,7 +350,7 @@ export default {
    *  {@link https://www.w3.org/TR/wai-aria-practices/#dialog_modal}
    */
   render() {
-    return this.$scopedSlots.default({
+    return this[universalSlotAccessProp].default({
       open: this.open,
       closeFn: this.close,
       backdropRef: {

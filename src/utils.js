@@ -21,3 +21,5 @@ export function uniqueId() {
   const id = ++idCounter
   return `a11y-dialog-${id}`
 }
+
+export const universalSlotAccessProp = isVue3 ? '$slots' : '$scopedSlots'
