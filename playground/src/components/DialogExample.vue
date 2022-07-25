@@ -7,16 +7,18 @@
       <a11y-dialog
         v-bind="$props"
         v-on="$listeners"
-        #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+        #default="{ backdropRef, dialogRef, titleRef, closeRef, focusRef }"
       >
         <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners">
-          <div class="d__inner" v-bind="dialogRef.props" v-on="dialogRef.listeners">
+          <div
+            class="d__inner"
+            v-bind="dialogRef.props"
+            v-on="dialogRef.listeners"
+          >
             <header>
               <h1 v-bind="titleRef.props">Title</h1>
-              <button
-                v-bind="closeRef.props"
-                v-on="closeRef.listeners"
-              >x
+              <button v-bind="closeRef.props" v-on="closeRef.listeners">
+                x
               </button>
             </header>
 
@@ -28,9 +30,10 @@
               </div>
               <button @click="innerTest = !innerTest">Show this</button>
               <div v-if="innerTest">
-                with dynamic <a href="#asda">focusable elements</a> to check if the focus trap is still working
+                with dynamic <a href="#asda">focusable elements</a> to check if
+                the focus trap is still working
               </div>
-              <slot v-bind="{ focusRef }"/>
+              <slot v-bind="{ focusRef }" />
             </section>
           </div>
         </div>
@@ -40,34 +43,33 @@
 </template>
 
 <script>
-import { A11yDialog } from '../../../src/index'
+import { A11yDialog } from "../../../src/index";
 import { Portal } from "portal-vue";
 import { Portal as SimplePortal } from "@linusborg/vue-simple-portal";
 
 export default {
-  name: 'DialogExample',
+  name: "DialogExample",
   components: {
     A11yDialog,
     Portal,
-    SimplePortal
+    SimplePortal,
   },
-  extends: {A11yDialog},
-  props: ['open', 'role', 'useSimplePortal'],
+  props: ["open", "role", "useSimplePortal"],
   data: () => ({
     disablePortal: false,
-    innerTest: false
+    innerTest: false,
   }),
-}
+};
 </script>
 
 <style lang="scss">
 .d {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -80,11 +82,11 @@ export default {
   padding: 20px;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-
 </style>

@@ -3,7 +3,7 @@
     <main id="main">
       <button @click="basicDialog = true">Open basic Dialog</button>
       <button @click="isOpen = !isOpen">Default</button>
-      <button style="visibility:hidden">Default</button>
+      <button style="visibility: hidden">Default</button>
 
       <BasicDialog
         :open="basicDialog"
@@ -15,7 +15,8 @@
           <strong>your rules</strong>
         </template>
         <template v-slot:default>
-          Are you sure you want to be overriding CSS or pass a thousand props again?
+          Are you sure you want to be overriding CSS or pass a thousand props
+          again?
         </template>
       </BasicDialog>
 
@@ -23,21 +24,28 @@
         :open="isOpen"
         @close="isOpen = false"
         key="lonely"
-        #default="{ focusRef }">
-         <div v-if="submit2" style="margin-bottom: 20px">
+        #default="{ focusRef }"
+      >
+        <div v-if="submit2" style="margin-bottom: 20px">
           <button disabled>prev</button>
           <button disabled>other prev</button>
           <button>Me</button>
           <a href="#asd">I'm prev</a>
           <button>Last preve</button>
         </div>
-        <button @click="asyncAction2" :disabled="submitting2" v-if="!submit2">Remove me: prefix content</button>
+        <button @click="asyncAction2" :disabled="submitting2" v-if="!submit2">
+          Remove me: prefix content
+        </button>
 
         <button :disabled="last">Simpaty prev disabled</button>
-        <button @click="last = true" :disabled="last">I tur me and sibling disabled</button>
+        <button @click="last = true" :disabled="last">
+          I tur me and sibling disabled
+        </button>
         <button v-if="!last">Simpaty disabled</button>
 
-        <button @click="asyncAction" :disabled="submitting " v-if="!submit">Remove Me on submit</button>
+        <button @click="asyncAction" :disabled="submitting" v-if="!submit">
+          Remove Me on submit
+        </button>
         <div v-if="submit" style="margin-top: 20px">
           <button disabled>I'm nex</button>
           <button disabled>other</button>
@@ -48,7 +56,10 @@
       </DialogExample>
 
       <button @click="exOpen = !exOpen">Nested Example</button>
-      <DialogExample :open="exOpen" @close="exOpen = false" key="parent"
+      <DialogExample
+        :open="exOpen"
+        @close="exOpen = false"
+        key="parent"
         @show="preventBodyScroll(true, $event)"
         @hide="preventBodyScroll(false, $event)"
         :use-simple-portal="true"
@@ -63,7 +74,10 @@
           @show="preventBodyScroll(true, $event)"
           @hide="preventBodyScroll(false, $event)"
         >
-          <h3>This wont' on backdrop click since it's an alertdialog, and backdrop is outside dialog</h3>
+          <h3>
+            This wont' on backdrop click since it's an alertdialog, and backdrop
+            is outside dialog
+          </h3>
         </DialogExample>
       </DialogExample>
 
@@ -76,7 +90,8 @@
         @show="preventBodyScroll(true, $event)"
         @hide="preventBodyScroll(false, $event)"
       >
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate,
+        velit?
       </DialogExample>
 
       <button @click="showDialog('useSimplePortal')">Use simple portal</button>
@@ -85,18 +100,22 @@
         :use-simple-portal="true"
         @close="closeDialog('useSimplePortal')"
       >
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate, velit?
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate,
+        velit?
       </DialogExample>
 
-
-      <button @click="showDialog('useSimplePortalNested')">Use simple portal with nest</button>
+      <button @click="showDialog('useSimplePortalNested')">
+        Use simple portal with nest
+      </button>
       <DialogExample
         :open="examples.useSimplePortalNested"
         :use-simple-portal="true"
         @close="closeDialog('useSimplePortalNested')"
       >
         qweqexw
-        <button @click="showDialog('useSimplePortalNestedChild')">Open nested</button>
+        <button @click="showDialog('useSimplePortalNestedChild')">
+          Open nested
+        </button>
         <DialogExample
           :open="examples.useSimplePortalNestedChild"
           @close="closeDialog('useSimplePortalNestedChild')"
@@ -104,13 +123,15 @@
           key="nested"
           :use-simple-portal="true"
         >
-          <h3>This wont' on backdrop click since it's an alertdialog, and backdrop is outside dialog</h3>
+          <h3>
+            This wont' on backdrop click since it's an alertdialog, and backdrop
+            is outside dialog
+          </h3>
         </DialogExample>
       </DialogExample>
 
       <h1>{{ "make it scroll".repeat(100) }}</h1>
     </main>
-
 
     <!-- render at end of root -->
     <portal-target name="a11y-dialogs" multiple />
@@ -120,11 +141,10 @@
 
 <script>
 /** eslint-disable */
-import 'focus-visible'
+import "focus-visible";
 import { PortalTarget } from "portal-vue";
 import DialogExample from "./components/DialogExample.vue";
 import BasicDialog from "./components/BasicDialog.vue";
-
 
 export default {
   name: "Playground",
@@ -149,47 +169,47 @@ export default {
       preventScroll: false,
       useSimplePortal: false,
       useSimplePortalNested: false,
-      useSimplePortalNestedChild: false
-    }
+      useSimplePortalNestedChild: false,
+    },
   }),
   methods: {
     asyncAction() {
-      this.submitting = true
+      this.submitting = true;
 
       setTimeout(() => {
-        this.submitting = false
-        this.submit = true
-      }, 2000)
+        this.submitting = false;
+        this.submit = true;
+      }, 2000);
     },
     asyncAction2() {
-      this.submitting2 = true
+      this.submitting2 = true;
 
       setTimeout(() => {
-        this.submitting2 = false
-        this.submit2 = true
-      }, 2000)
+        this.submitting2 = false;
+        this.submit2 = true;
+      }, 2000);
     },
     showDialog(key) {
-      this.$set(this.examples, key, true)
+      this.$set(this.examples, key, true);
     },
     closeDialog(key) {
-      this.$set(this.examples, key, false)
+      this.$set(this.examples, key, false);
     },
 
     preventBodyScroll(bool, hasSiblings) {
-      if (hasSiblings) return // do nothing
+      if (hasSiblings) return; // do nothing
 
       bool
-        ? document.body.style.overflow = 'hidden'
-        : document.body.style.overflow = ''
-    }
-  }
-}
+        ? (document.body.style.overflow = "hidden")
+        : (document.body.style.overflow = "");
+    },
+  },
+};
 </script>
 
 <style>
 button:focus,
 a:focus {
-  outline: 2px solid red
+  outline: 2px solid red;
 }
 </style>
