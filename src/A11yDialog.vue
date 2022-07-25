@@ -1,6 +1,6 @@
 <script>
 import { createFocusTrap } from 'focus-trap'
-import { noop, UniversalLifecyleNamesMap } from './utils.js'
+import { noop, UniversalLifecyleNamesMap, uniqueId } from './utils.js'
 
 // @see [FT3]
 const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus], textarea[autofocus]'
@@ -158,7 +158,7 @@ export default {
      * @returns {Boolean} performs checks for other ref dependend methods
      */
     getDOMRefs() {
-      this.dialogRoot = document.querySelector(`[data-id="a11y-dialog-${this._uid}"]`);
+      this.dialogRoot = document.querySelector(`[data-id="${this.id}"]`);
 
       if (this.dialogRoot) {
         this.dialogEl = this.dialogRoot.querySelector('[data-ref="dialog"]');
@@ -315,7 +315,7 @@ export default {
    * called. Needs investigation
    */
   created() {
-    this.id = `a11y-dialog-${this._uid}`
+    this.id = uniqueId()
   },
 
   [UniversalLifecyleNamesMap.beforeUnmount]() {

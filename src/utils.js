@@ -12,3 +12,12 @@ export const UniversalLifecyleNamesMap = {
 
 /** @type {function} */
 export const noop = () => {};
+
+/**
+ * poor-mans lodash-like uniqueId. Avoid using internal vue ._uid property.
+ */
+let idCounter = 0
+export function uniqueId() {
+  const id = ++idCounter
+  return `a11y-dialog-${id}`
+}
