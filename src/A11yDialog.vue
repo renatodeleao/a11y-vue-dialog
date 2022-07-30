@@ -27,6 +27,9 @@ const getInitialState = () => ({
 export const VALID_ROLES = ["dialog", "alertdialog"];
 
 export default {
+  compatConfig: {
+    MODE: 3 // opt-in to Vue 3 if loaded in compat mode
+  },
   name: "a11y-dialog",
   emits: ['show', 'hide', 'close'],
   props: {
