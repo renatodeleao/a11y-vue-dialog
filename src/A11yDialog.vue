@@ -28,7 +28,9 @@ export const VALID_ROLES = ["dialog", "alertdialog"];
 
 export default {
   compatConfig: {
-    MODE: 3 // opt-in to Vue 3 if loaded in compat mode
+    MODE: 3,
+    INSTANCE_SCOPED_SLOTS: false,
+    RENDER_FUNCTION: false
   },
   name: "a11y-dialog",
   emits: ['show', 'hide', 'close'],
