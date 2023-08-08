@@ -15,6 +15,7 @@ const AUTOFOCUS_QUERY = 'input[autofocus], button[autofocus], select[autofocus],
  */
 const getInitialState = () => ({
   id: null,
+  dialogRootEl: null,
   dialogEl: null,
   closeEl: null,
   focusRef: null,
@@ -169,12 +170,13 @@ export default {
      * @returns {Boolean} performs checks for other ref dependend methods
      */
     getDOMRefs() {
-      this.dialogRoot = document.querySelector(`[data-id="${this.id}"]`);
+      this.dialogRootEl = document.querySelector(`[data-id="${this.id}"]`);
 
-      if (this.dialogRoot) {
-        this.dialogEl = this.dialogRoot.querySelector('[data-ref="dialog"]');
-        this.closeEl = this.dialogRoot.querySelector('[data-ref="close"]');
-        this.focusRef = this.dialogRoot.querySelector('[data-ref="focus"]');
+      if (this.dialogRootEl) {
+        this.dialogEl = this.dialogRootEl.querySelector('[data-ref="dialog"]');
+        this.closeEl = this.dialogRootEl.querySelector('[data-ref="close"]');
+        this.focusRef = this.dialogRootEl.querySelector('[data-ref="focus"]');
+        debugger
         return true
       }
 
@@ -206,7 +208,9 @@ export default {
      *   @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes}
      */
     toggleFocusTrap(toggle) {
+      debugger
       if (toggle) {
+        debugger
         this.trap = createFocusTrap(
           this.dialogEl,
           {
@@ -219,6 +223,7 @@ export default {
         )
         this.trap.activate()
       } else {
+        debugger
         if (this.trap) this.trap.deactivate()
       }
     },
@@ -230,7 +235,7 @@ export default {
 
     // experimental for multiple modals
     lookForSiblings() {
-      this.portalTarget = this.dialogRoot.parentElement;
+      this.portalTarget = this.dialogRootEl.parentElement;
       this.siblingsCount = this.portalTarget.children.length;
     },
 
@@ -267,56 +272,6 @@ export default {
         contentRootSiblings.forEach(s => s && s.removeAttribute('aria-hidden'))
       }
     },
-
-    /**
-    * Internals.
-    *
-    * mostly created for testing, because i didn't figure out a
-    * away of mock funtions that are defined, inline into the scopedSlots
-    * returned Object
-    */
-    _stopPropagation(e) {
-      e.stopPropagation()
-    },
-
-    /**
-     * Prevents mouseup that started inside (dialogRef mousedown) to bubble
-     * and trigger backdrop click, consequentially closing the dialog.
-     *
-     * ⚠️ Note: for cases when backdropRef wraps the dialog content,
-     *    so it's also our root, that's why it's affected by children
-     *    events bubbling
-     *
-     * This prevents a default browser behaviour, when the mouse click is released,
-     * both the mouseup and click events are fired. Since consumers might define
-     * backdrop as root (picture a pseudo element as the overlay for example)
-     *
-     * Setting as separate element inside the root doens't require this, but
-     * we must remain unopinionated in relation to markup.
-     *
-     * @see https://stackoverflow.com/a/20290312/2801012
-     * @see https://codesandbox.io/s/click-drag-selection-outside-still-triggers-click-after-mouseup-t0742
-     *
-     * @see captureMouseUp
-     * @see spyMouseDown
-     * @see spyMouseUp
-     */
-    captureMouseUp(e) {
-      e.stopPropagation(); // Stop the click from being propagated.
-      window.removeEventListener('click', this.captureMouseUp, true); // cleanup
-      this.mouseDownOrigin = null
-    },
-    spyMouseDown(e) {
-      e.stopPropagation()
-      this.mouseDownOrigin = e.target
-    },
-    spyMouseUp(e) {
-      e.stopPropagation()
-      if (this.mouseDownOrigin !== e.target) {
-        // capture it: was triggered somewhere else
-        window.addEventListener('click', this.captureMouseUp, true)
-      }
-    }
   },
 
   /**
@@ -359,17 +314,18 @@ export default {
     return this[universalSlotAccessProp].default({
       open: this.open,
       closeFn: this.close,
+      rootRef: {
+        props: {
+          'data-id': this.id,
+        }
+      },
       backdropRef: {
         props: {
           'tabindex': '-1',
-          'data-id': this.id,
           'data-ref': 'backdrop',
         },
         listeners: {
           click: this.role !== 'alertdialog' ? this.close : noop,
-          keydown: this.handleKeyboard, // [1]
-          mousedown: this.spyMouseDown,
-          mouseup: this.spyMouseUp,
         }
       },
       dialogRef: {
@@ -380,10 +336,7 @@ export default {
           tabindex: '-1' // [FT2]
         },
         listeners: {
-          click: this._stopPropagation,
           keydown: this.handleKeyboard,
-          mousedown: this.spyMouseDown,
-          mouseup: this.spyMouseUp,
         }
       },
       // [2]

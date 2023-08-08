@@ -22,7 +22,7 @@ yarn add a11y-dialog
 
 ## Usage
 
-A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your markup and styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
+A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
 
 ```vue
 <!-- AppBaseDialog.vue -->
@@ -30,11 +30,15 @@ A renderless/headless component provides all the functionality required to build
   <a11y-dialog 
     v-bind="$attrs" 
     v-on="$listeners"
-    v-slot:default="{ titleRef, closeRef }"
+    v-slot:default="{ rootRef, dialogRef, titleRef, closeRef }"
   > 
-    <!-- Bindings do the accessibility attributes for you -->
-    <h1 v-bind="titleRef.props">{{ title }}</h1>
-    <button v-bind="closeRef.props" v-on="closeRef.listeners">
+    <div v-bind="rootRef.prop">
+      <!-- Bindings do the accessibility attributes for you -->
+      <div v-bind="dialogRef.props" v-on="dialogRef.listeners">
+        <h1 v-bind="titleRef.props">{{ title }}</h1>
+        <button v-bind="closeRef.props" v-on="closeRef.listeners">
+      </div>
+    </div>
     ...
     <slot />
   </a11y-dialog>

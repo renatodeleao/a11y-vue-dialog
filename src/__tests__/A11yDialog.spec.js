@@ -58,14 +58,15 @@ describe("A11yDialog", () => {
       <MockedA11yDialog
         :open="isOpen"
         @close="$emit('close')"
-        #default="{ open, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+        #default="{ open, rootRef, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
       >
         <portal to="a11y-dialogs" v-if="open">
-          <div
-            class="mock-dialog"
-            v-bind="backdropRef.props"
-            v-on="backdropRef.listeners"
-          >
+          <div class="mock-dialog" v-bind="rootRef.props">
+            <div
+              class="mock-dialog__backdrop"
+              v-bind="backdropRef.props"
+              v-on="backdropRef.listeners"
+            />
             <div
               class="mock-dialog__inner"
               v-bind="dialogRef.props"
@@ -171,14 +172,21 @@ describe("A11yDialog", () => {
   })
 
   describe('bindings', () => {
+    describe('rootRef', () => {
+      const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
+      const rootRef = _wrapper.find('[data-id]')
+
+      expect(rootRef.exists()).toBe(true)
+      expect(rootRef.attributes('data-id')).toContain(`a11y-dialog-`)
+    })
+
     describe('backdropRef', () => {
       const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
-      const backdropRef = _wrapper.find('.mock-dialog')
+      const backdropRef = _wrapper.find('[data-ref="backdrop"]')
 
       it('should attach correct binding props to bound element', () => {
-        expect(backdropRef.attributes('data-ref')).toBe('backdrop')
+        expect(backdropRef.exists()).toBe(true)
         expect(backdropRef.attributes('tabindex')).toBe('-1')
-        expect(backdropRef.attributes('data-id')).toContain(`a11y-dialog-`)
       })
 
       it('should attach correct binding listeners to bound element', async () => {
@@ -213,23 +221,16 @@ describe("A11yDialog", () => {
       it('should attach correct binding listeners to bound element', async () => {
         const test = jest.fn(event)
         const _wrapper = mountWithOptions({
-          methods: {
-            handleKeyboard: test
-          },
-          data: () => ({ isOpen: true }) })
+          data: () => ({ isOpen: true })
+        })
 
         await _wrapper.vm.$nextTick()
 
         const dialogRef = _wrapper.find('.mock-dialog__inner')
 
-        dialogRef.trigger('click', event)
-        // dialogRef.trigger('keydown.esc', another)
-        // dialogRef.trigger('keydown.tab', event)
-
-        await _wrapper.vm.$nextTick()
-
-        expect(event.stopPropagation).toBeCalledTimes(1);
-        // expect(test).toHaveBeenCalled();
+        expect(_wrapper.emitted('close')).toBeFalsy()
+        await dialogRef.trigger('keydown', { key: 'Escape' })
+        expect(_wrapper.emitted('close')).toBeTruthy()
       })
     })
 
@@ -280,6 +281,9 @@ describe("A11yDialog", () => {
       it('should emit show/hide events on open with hasSiblings boolean', async () => {
         const _wrapper = mountWithOptions({ data: () => ({ isOpen: true }) })
 
+        // see triple nextTickHack in handleOpen
+        await _wrapper.vm.$nextTick()
+        await _wrapper.vm.$nextTick()
         await _wrapper.vm.$nextTick()
 
         expect(_wrapper.emitted().show).toBeTruthy()
@@ -313,39 +317,6 @@ describe("A11yDialog", () => {
         searchInput.trigger('keydown.esc')
 
         expect(_wrapper.emitted('close')).toBeFalsy()
-      })
-
-      /**
-      * @todo for cases where backdrop is root and wraps dialogRef (content)
-      * edge case when someone, for example, starts selecting text inside
-      * dialogRef and drags selection to outside and relases mouse click (mouseup)
-      *
-      * 🆘 I have no clue how to write a test for this
-      *
-      * @see A11yDialog#captureMouseUp
-      */
-      it('should stop backdropRef click event if mouseup on backdropRef is preceded from a mousedown with a different origin', async () => {
-        const container = mountWithOptions({
-          data: () => ({ isOpen: true })
-        })
-
-        const backdropRefIsRoot = container.find('[data-ref="backdrop"]')
-        const dialogRef = container.find('[data-ref="dialog"]')
-
-        expect(container.vm.mouseDownOrigin).toBeNull();
-        dialogRef.trigger('mousedown')
-
-        // save an origin of the moused in the data model
-        expect(container.vm.mouseDownOrigin.className).toEqual('mock-dialog__inner');
-
-        // trigger mouseup on backdrop after mousedown on dialog "pseudo-drag"
-        backdropRefIsRoot.trigger('mouseup')
-
-        // since mouse
-        expect(container.emitted().close).toBeUndefined()
-        // this is what's actually happen but can't mock
-        //expect(container.vm.captureMouseUp).toHaveBeenCalled()
-        //expect(container.vm.mouseDownOrigin).toBeNull()
       })
     })
   })

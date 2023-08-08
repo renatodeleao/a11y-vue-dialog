@@ -4,6 +4,7 @@
     v-on="$listeners"
     #default="{
       open,
+      rootRef,
       closeFn,
       backdropRef,
       dialogRef,
@@ -11,12 +12,13 @@
       closeRef,
     }"
   >
-    <portal to="a11y-vue-dialogs" v-if="open">
-      <div
-        class="dialog"
-        v-bind="backdropRef.props"
-        v-on="backdropRef.listeners"
-      >
+    <portal to="a11y-vue-dialogs">
+      <div class="dialog" v-bind="rootRef.props" v-if="open">
+        <div
+          class="dialog__backdrop"
+          v-bind="backdropRef.props"
+          v-on="backdropRef.listeners"
+        />
         <div
           class="dialog__inner"
           v-bind="dialogRef.props"
@@ -47,13 +49,13 @@
 </template>
 
 <script>
-import { A11yDialog } from '../../../src/index'
+import { A11yDialog } from "../../../src/index";
 import { Portal } from "@linusborg/vue-simple-portal";
 export default {
   name: "BasicDialog",
   components: {
     A11yDialog,
-    Portal
+    Portal,
   },
   props: {
     title: {
@@ -79,7 +81,16 @@ export default {
   text-align: left;
 }
 
+.dialog__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .dialog__inner {
+  position: relative;
   background: white;
   max-width: 400px;
 }
@@ -118,4 +129,3 @@ export default {
   background-color: lime;
 }
 </style>
-

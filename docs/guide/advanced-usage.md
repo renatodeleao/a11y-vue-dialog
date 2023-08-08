@@ -8,8 +8,9 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
 | ------------| -------- | ---- |
 | open        | Boolean  | prop forwarding for portal v-if   
 | close       | Function | method forwarding for closing the dialog   
+| rootRef     | Object   | (⚠️required) for the root dialog element
 | backdropRef | Object   | for the backdrop element
-| dialogRef   | Object   | for the main dialog element
+| dialogRef   | Object   | (⚠️required) for the main dialog element
 | closeRef    | Object   | for attaching close buttons/actions
 | titleRef    | Object   | For attaching dialog title, accessibility 
 | focusRef    | Object   | For cherry-picking the first focusable element on open
@@ -23,12 +24,13 @@ Each `ref` suffixed slotProp is an object that contains a "props" and "listeners
     <a11y-dialog 
       v-bind="$attrs"
       v-on="$listeners"
-      #default="{ open, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+      #default="{ open, rootRef, closeFn, backdropRef, dialogRef, titleRef, closeRef, focusRef }"
     >
-      <div class="youclasses" 
-        v-bind="backdropRef.props" 
-        v-on="backdropRef.listeners"
-      >
+      <div class="yourclasses" v-bind="rootRef.props">
+        <div class="yourclasses__backdrop" 
+          v-bind="backdropRef.props" 
+          v-on="backdropRef.listeners"
+        />
         <div 
           class="youclasses__element" 
           v-bind="dialogRef.props" 

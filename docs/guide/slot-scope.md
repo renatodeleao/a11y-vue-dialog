@@ -5,8 +5,9 @@ The default `scopedSlot` exposed props help you bind the accessibility attribute
 | slotProp    | type     | desc
 | ------------| -------- | ---- |
 | closeFn     | Function | method forwarding for closing the dialog   
+| rootRef     | Object   | (⚠️required) for the root dialog element
 | backdropRef | Object   | for the backdrop element
-| dialogRef   | Object   | for the main dialog element
+| dialogRef   | Object   | (⚠️required) for the main dialog element
 | closeRef    | Object   | for attaching close buttons/actions
 | titleRef    | Object   | For attaching dialog title, accessibility 
 | focusRef    | Object   | For cherry-picking the first focusable element on open

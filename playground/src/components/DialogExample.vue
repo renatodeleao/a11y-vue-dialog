@@ -7,9 +7,21 @@
       <a11y-dialog
         v-bind="$props"
         v-on="$listeners"
-        #default="{ backdropRef, dialogRef, titleRef, closeRef, focusRef }"
+        #default="{
+          rootRef,
+          backdropRef,
+          dialogRef,
+          titleRef,
+          closeRef,
+          focusRef,
+        }"
       >
-        <div class="d" v-bind="backdropRef.props" v-on="backdropRef.listeners">
+        <div class="d" v-bind="rootRef.props">
+          <div
+            class="d__backdrop"
+            v-bind="backdropRef.props"
+            v-on="backdropRef.listeners"
+          />
           <div
             class="d__inner"
             v-bind="dialogRef.props"
@@ -77,7 +89,16 @@ export default {
   place-content: center;
 }
 
+.d__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .d__inner {
+  position: relative;
   background: white;
   padding: 20px;
 }

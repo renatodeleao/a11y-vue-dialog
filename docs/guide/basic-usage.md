@@ -9,7 +9,7 @@ yarn add a11y-vue-dialog
 
 ## Usage
 
-A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your markup and styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
+A renderless/headless component provides all the functionality required to build a proper `Dialog`, but gives zero f*cks about your styles. As such you have full control over it and have to DYI. Here's a basic example on how to do it:
 
 ```vue
 <!-- AppBaseDialog.vue -->
