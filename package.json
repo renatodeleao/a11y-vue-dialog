@@ -16,9 +16,6 @@
     "portal",
     "vue"
   ],
-  "engines": {
-    "node": "^14 || ^16"
-  },
   "license": "MIT",
   "main": "dist/a11y-vue-dialog.umd.js",
   "module": "dist/a11y-vue-dialog.esm.js",
