@@ -182,7 +182,6 @@ export default {
         this.dialogEl = this.dialogRootEl.querySelector('[data-ref="dialog"]');
         this.closeEl = this.dialogRootEl.querySelector('[data-ref="close"]');
         this.focusRef = this.dialogRootEl.querySelector('[data-ref="focus"]');
-        debugger
         return true
       }
 
@@ -214,9 +213,7 @@ export default {
      *   @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes}
      */
     toggleFocusTrap(toggle) {
-      debugger
       if (toggle) {
-        debugger
         this.trap = createFocusTrap(
           this.dialogEl,
           {
@@ -229,7 +226,6 @@ export default {
         )
         this.trap.activate()
       } else {
-        debugger
         if (this.trap) this.trap.deactivate()
       }
     },
