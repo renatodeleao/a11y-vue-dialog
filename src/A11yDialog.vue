@@ -90,24 +90,30 @@ export default {
      * rendered with v-if on root node.
      *
      * @todo [1] - kind of embarassing but i need to investigate the need of
-     * double nextTick, otherwise it will fail to get DOM refs from data-attrs.
+     * triple nextTick, otherwise it will fail to get DOM refs from data-attrs.
      * I get that we need one, But two? Maybe due portal mount as well? Investigate.
+     *
+     * One next tick (no portal)
+     * Two if v-if is on portal
+     * Three if v-if on portal default slot root element (dialogRoot)
      *
      * If found, please write a test to it,
      */
-    handleOpen() {
-      this.$nextTick(() => {
-        this.$nextTick(() => {
-          const hasRefs = this.getDOMRefs();
-          // do no perform DOM actions if no DOM references
-          if (!hasRefs) return;
+    async handleOpen() {
+      //[1]
+      await this.$nextTick()
+      await this.$nextTick()
+      await this.$nextTick()
 
-          this.toggleFocusTrap(true);
-          this.lookForSiblings();
-          this.toggleVisibilityEvents(true);
-          this.toggleContentAriaAttrs(true);
-        })
-      })
+      const hasRefs = this.getDOMRefs();
+      // do no perform DOM actions if no DOM references
+      if (!hasRefs) return;
+
+      this.toggleFocusTrap(true);
+      this.lookForSiblings();
+      this.toggleVisibilityEvents(true);
+      this.toggleContentAriaAttrs(true);
+
     },
      /**
      * "open" prop watcher side effects. Orchestrates everything DOM related
