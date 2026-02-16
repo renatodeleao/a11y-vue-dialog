@@ -63,11 +63,12 @@
     "src"
   ],
   "dependencies": {
-    "focus-trap": "^7.3.1"
+    "focus-trap": "^7.3.1 || ^8.0.0"
   },
   "resolutions": {
     "js-yaml": "^3.11.1",
     "vuepress/**/vue-server-renderer": "2.6.14",
-    "**/json-schema": "^0.4.0"
+    "**/json-schema": "^0.4.0",
+    "focus-trap": "^8.0.0"
   }
 }
