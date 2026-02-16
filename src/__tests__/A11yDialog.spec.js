@@ -119,13 +119,13 @@ describe("A11yDialog", () => {
 
   const mountWithOptions = (options = {}) => {
     return mount(WrapperComp, {
-      attachToDocument: true,
+      attachTo: document.body,
       stubs: {
         portal: true,
         ...options.stubs
       },
       ...options
-    }).find(A11yDialog)
+    }).findComponent(A11yDialog)
   }
 
   const wrapper = mountWithOptions()
@@ -152,7 +152,6 @@ describe("A11yDialog", () => {
 
   // sanity check
   it("is a Vue instance", () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
     expect(wrapper.is(A11yDialog)).toBeTruthy();
   });
 
